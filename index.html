@@ -9,41 +9,41 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: url("background.jpg") no-repeat center center fixed;
+  background: url("crispr-cas9-background.png") no-repeat center center fixed;
   background-size: cover;
 }
 
-.overlay {
-  background: rgba(0, 0, 0, 0.75);
-  min-height: 100vh;
-  padding: 40px 20px;
-}
-
 .container {
-  max-width: 900px;
-  margin: auto;
+  max-width: 1000px;
+  margin: 0 auto;
   background: white;
-  padding: 40px;
-  border-radius: 15px;
+  padding: 50px 40px;
 }
 
-h1, h2 {
+h1 {
   color: #0b5fff;
+  margin-top: 0;
+}
+
+h2 {
+  color: #0b5fff;
+  margin-top: 40px;
 }
 
 .profile {
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-top: 20px;
 }
 
 .profile img {
-  width: 120px;
+  width: 130px;
   border-radius: 10px;
 }
 
-.section {
-  margin-top: 40px;
+ul {
+  padding-left: 20px;
 }
 
 a {
@@ -63,26 +63,29 @@ a:hover {
   color: white;
   border-radius: 5px;
 }
+
+.warning {
+  font-size: 14px;
+  color: #cc0000;
+}
 </style>
 </head>
 
 <body>
 
-<div class="overlay">
 <div class="container">
 
 <h1>Genome Learning Portfolio</h1>
 <p><strong>Path to Becoming a Geneticist</strong></p>
 
 <div class="profile">
-  <img src="profile.jpg" alt="Mark Gonzalez">
-  <div>
-    <p>I am a UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology.</p>
-    <p>My long-term goal is to become a geneticist specializing in genome editing and CRISPR-Cas9 systems.</p>
-  </div>
+<img src="profile.jpg" alt="Mark Gonzalez">
+<p>
+I am a UTRGV student currently completing Biology I and Chemistry II, building strong foundations in genetics and molecular biology. 
+My long-term goal is to specialize in genome editing and CRISPR-Cas9 systems.
+</p>
 </div>
 
-<div class="section">
 <h2>🧬 Academic Focus</h2>
 <ul>
 <li>Genetics Foundations</li>
@@ -90,43 +93,76 @@ a:hover {
 <li>Genome Engineering</li>
 <li>CRISPR-Cas9 Systems</li>
 </ul>
-</div>
 
-<div class="section">
 <h2>🔬 CRISPR-Cas9 Overview</h2>
-<p>CRISPR-Cas9 is a genome editing system that allows scientists to precisely modify DNA sequences. The Cas9 enzyme, guided by RNA, identifies a specific DNA target sequence and introduces a double-strand break. The cell then repairs the break through either Non-Homologous End Joining (NHEJ) or Homology-Directed Repair (HDR).</p>
-<p>Understanding CRISPR requires knowledge of:</p>
+<p>
+CRISPR-Cas9 is a genome editing system where the Cas9 enzyme, guided by RNA, locates a specific DNA sequence and creates a double-strand break. 
+The cell repairs the break through:
+</p>
 <ul>
-<li>DNA structure and base pairing</li>
-<li>PAM sequences</li>
-<li>Guide RNA design</li>
-<li>DNA repair mechanisms</li>
-<li>Chemical bond interactions within biomolecules</li>
+<li><strong>Non-Homologous End Joining (NHEJ)</strong> – error-prone repair</li>
+<li><strong>Homology-Directed Repair (HDR)</strong> – precise DNA correction</li>
 </ul>
-</div>
 
-<div class="section">
 <h2>🎥 Video Learning Log</h2>
-<p>Follow my progress as I explain genetics concepts and molecular biology foundations:</p>
+<p>Explaining genetics and molecular biology concepts step-by-step:</p>
 
+<iframe width="100%" height="315"
+src="https://www.youtube.com/embed?listType=user_uploads&list=LuckyGhostH23"
+frameborder="0" allowfullscreen>
+</iframe>
+
+<p>If embed does not load, visit directly:</p>
 <a class="button" href="https://www.youtube.com/@LuckyGhostH23" target="_blank">
-Visit My YouTube Channel
+Visit YouTube Channel
 </a>
 
-</div>
+<h2>📚 Professional & Student Resources</h2>
 
-<div class="section">
-<h2>📚 Resources</h2>
+<h3>Foundational Text</h3>
 <ul>
 <li><em>Genetics: From Genes to Genomes</em> – Goldberg (2023)</li>
-<li>UTRGV Biology & Chemistry Coursework</li>
-<li>Independent CRISPR and molecular biology study</li>
 </ul>
-</div>
 
-<div class="section">
+<h3>Professional Research Databases</h3>
+<ul>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank">PubMed</a> – biomedical research database</li>
+<li><a href="https://www.ncbi.nlm.nih.gov/" target="_blank">NCBI</a> – genetic and genomic databases</li>
+<li><a href="https://www.addgene.org/crispr/" target="_blank">Addgene CRISPR Guide</a> – CRISPR tools and plasmids</li>
+<li><a href="https://benchling.com/" target="_blank">Benchling</a> – molecular biology platform</li>
+</ul>
+
+<p class="warning">
+Note: Some professional tools may require institutional or paid access for editing capabilities. These are included for educational awareness.
+</p>
+
+<h3>Open-Access CRISPR Research</h3>
+<ul>
+<li>Doudna & Charpentier (2012) – foundational CRISPR paper (search via PubMed)</li>
+<li>bioRxiv (https://www.biorxiv.org/) – free preprint server for biology research</li>
+</ul>
+
+<h2>🤝 Volunteer & Internship Opportunities</h2>
+
+<ul>
+<li>UTRGV Undergraduate Research Programs</li>
+<li>UTRGV Engaged Learning Office</li>
+<li>Oak Ridge National Laboratory (ORNL) Summer Internships</li>
+<li>National Science Foundation (NSF) REU Programs</li>
+<li>NIH Summer Internship Program</li>
+</ul>
+
+<h2>📅 Events & Academic Development</h2>
+<ul>
+<li>UTRGV Research Symposium</li>
+<li>Genome Editing Webinars</li>
+<li>CRISPR Conferences (virtual options available)</li>
+</ul>
+
 <h2>📬 Contact</h2>
-<p>I am actively seeking opportunities in genetics, molecular biology, and genome engineering research.</p>
+<p>
+I am actively seeking research exposure and collaboration in genetics, molecular biology, and genome engineering.
+</p>
 
 <p><strong>Email:</strong> 
 <a href="mailto:mark250gonzalez@gmail.com">
@@ -140,14 +176,6 @@ linkedin.com/in/mark-gonzalez-858167266
 </a>
 </p>
 
-<p><strong>GitHub:</strong> 
-<a href="https://github.com/Mark250wolf" target="_blank">
-github.com/Mark250wolf
-</a>
-</p>
-</div>
-
-</div>
 </div>
 
 </body>
