@@ -1,62 +1,154 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Genome Learning Portfolio | Mark Gonzalez</title>
-  <style>
-    body{font-family:system-ui, Arial, sans-serif; margin:0; line-height:1.5;}
-    header{padding:56px 16px; max-width:920px; margin:0 auto;}
-    h1{font-size:40px; margin:0 0 8px;}
-    p{font-size:18px; margin:0 0 16px; color:#222;}
-    .tag{display:inline-block; padding:6px 10px; border:1px solid #ddd; border-radius:999px; margin:6px 8px 0 0;}
-    main{padding:0 16px 56px; max-width:920px; margin:0 auto;}
-    .card{border:1px solid #eee; border-radius:16px; padding:18px; margin:14px 0;}
-    a{color:#0b5fff; text-decoration:none;}
-    a:hover{text-decoration:underline;}
-    footer{padding:18px 16px; border-top:1px solid #eee; color:#555;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genome Learning Portfolio | Mark Gonzalez</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: url("background.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.75);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+}
+
+h1, h2 {
+  color: #0b5fff;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile img {
+  width: 120px;
+  border-radius: 10px;
+}
+
+.section {
+  margin-top: 40px;
+}
+
+a {
+  color: #0b5fff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 15px;
+  margin-top: 10px;
+  background-color: #0b5fff;
+  color: white;
+  border-radius: 5px;
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>Genome Learning Portfolio</h1>
-    <p>Documenting my progress in genetics and molecular biology, building toward genome science and CRISPR-Cas9 research.</p>
-    <span class="tag">Genetics foundations</span>
-    <span class="tag">Molecular biology</span>
-    <span class="tag">Genome engineering</span>
-  </header>
 
-  <main>
-    <div class="card">
-      <h2>About</h2>
-      <p>I’m a UTRGV student currently completing Biology I and Chemistry II. This site tracks what I’m learning through written explanations and video breakdowns, based on coursework and <em>Genetics: From Genes to Genomes</em> (Goldberg, 2023).</p>
-    </div>
+<div class="overlay">
+<div class="container">
 
-    <div class="card">
-      <h2>What you’ll find</h2>
-      <ul>
-        <li>Chapter summaries & key takeaways</li>
-        <li>Concept breakdowns (clear explanations)</li>
-        <li>Video walkthroughs</li>
-        <li>Learning reflections and progress</li>
-      </ul>
-    </div>
+<h1>Genome Learning Portfolio</h1>
+<p><strong>Path to Becoming a Geneticist</strong></p>
 
-    <div class="card">
-      <h2>Links</h2>
-      <ul>
-        <li><a href="./README.md">Repository overview</a></li>
-        <li><a href="./">Home</a></li>
-      </ul>
-    </div>
-  </main>
+<div class="profile">
+  <img src="profile.jpg" alt="Mark Gonzalez">
+  <div>
+    <p>I am a UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology.</p>
+    <p>My long-term goal is to become a geneticist specializing in genome editing and CRISPR-Cas9 systems.</p>
+  </div>
+</div>
 
-  <footer>
-    © <span id="year"></span> Mark Gonzalez · Built with GitHub Pages
-  </footer>
+<div class="section">
+<h2>🧬 Academic Focus</h2>
+<ul>
+<li>Genetics Foundations</li>
+<li>Molecular Biology</li>
+<li>Genome Engineering</li>
+<li>CRISPR-Cas9 Systems</li>
+</ul>
+</div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+<div class="section">
+<h2>🔬 CRISPR-Cas9 Overview</h2>
+<p>CRISPR-Cas9 is a genome editing system that allows scientists to precisely modify DNA sequences. The Cas9 enzyme, guided by RNA, identifies a specific DNA target sequence and introduces a double-strand break. The cell then repairs the break through either Non-Homologous End Joining (NHEJ) or Homology-Directed Repair (HDR).</p>
+<p>Understanding CRISPR requires knowledge of:</p>
+<ul>
+<li>DNA structure and base pairing</li>
+<li>PAM sequences</li>
+<li>Guide RNA design</li>
+<li>DNA repair mechanisms</li>
+<li>Chemical bond interactions within biomolecules</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🎥 Video Learning Log</h2>
+<p>Follow my progress as I explain genetics concepts and molecular biology foundations:</p>
+
+<a class="button" href="https://www.youtube.com/@LuckyGhostH23" target="_blank">
+Visit My YouTube Channel
+</a>
+
+</div>
+
+<div class="section">
+<h2>📚 Resources</h2>
+<ul>
+<li><em>Genetics: From Genes to Genomes</em> – Goldberg (2023)</li>
+<li>UTRGV Biology & Chemistry Coursework</li>
+<li>Independent CRISPR and molecular biology study</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>📬 Contact</h2>
+<p>I am actively seeking opportunities in genetics, molecular biology, and genome engineering research.</p>
+
+<p><strong>Email:</strong> 
+<a href="mailto:mark250gonzalez@gmail.com">
+mark250gonzalez@gmail.com
+</a>
+</p>
+
+<p><strong>LinkedIn:</strong> 
+<a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank">
+linkedin.com/in/mark-gonzalez-858167266
+</a>
+</p>
+
+<p><strong>GitHub:</strong> 
+<a href="https://github.com/Mark250wolf" target="_blank">
+github.com/Mark250wolf
+</a>
+</p>
+</div>
+
+</div>
+</div>
+
 </body>
 </html>
