@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Genome Learning Portfolio | Mark Gonzalez</title>
+  <style>
+    body{font-family:system-ui, Arial, sans-serif; margin:0; line-height:1.5;}
+    header{padding:56px 16px; max-width:920px; margin:0 auto;}
+    h1{font-size:40px; margin:0 0 8px;}
+    p{font-size:18px; margin:0 0 16px; color:#222;}
+    .tag{display:inline-block; padding:6px 10px; border:1px solid #ddd; border-radius:999px; margin:6px 8px 0 0;}
+    main{padding:0 16px 56px; max-width:920px; margin:0 auto;}
+    .card{border:1px solid #eee; border-radius:16px; padding:18px; margin:14px 0;}
+    a{color:#0b5fff; text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    footer{padding:18px 16px; border-top:1px solid #eee; color:#555;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Genome Learning Portfolio</h1>
+    <p>Documenting my progress in genetics and molecular biology, building toward genome science and CRISPR-Cas9 research.</p>
+    <span class="tag">Genetics foundations</span>
+    <span class="tag">Molecular biology</span>
+    <span class="tag">Genome engineering</span>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>About</h2>
+      <p>I’m a UTRGV student currently completing Biology I and Chemistry II. This site tracks what I’m learning through written explanations and video breakdowns, based on coursework and <em>Genetics: From Genes to Genomes</em> (Goldberg, 2023).</p>
+    </div>
+
+    <div class="card">
+      <h2>What you’ll find</h2>
+      <ul>
+        <li>Chapter summaries & key takeaways</li>
+        <li>Concept breakdowns (clear explanations)</li>
+        <li>Video walkthroughs</li>
+        <li>Learning reflections and progress</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Links</h2>
+      <ul>
+        <li><a href="./README.md">Repository overview</a></li>
+        <li><a href="./">Home</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Mark Gonzalez · Built with GitHub Pages
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
