@@ -72,65 +72,140 @@ a:hover {
   font-size: 14px;
   color: #cc0000;
 }
+
+/* Simple responsive video embeds */
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.video-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.video-card h3 {
+  margin: 0 0 10px 0;
+}
+
+@media (min-width: 860px) {
+  .video-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <h1>Genome Learning Portfolio</h1>
 <p><strong>Path to Becoming a Geneticist | Genome Engineering & CRISPR-Cas9</strong></p>
 
 <div class="profile">
-<img src="profile.jpg" alt="Mark Gonzalez">
-<p>
-I am a UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology. 
-My long-term objective is to specialize in genome editing, CRISPR-Cas9 systems, and applied genetic research.
-</p>
+  <img src="profile.jpg" alt="Mark Gonzalez">
+  <p>
+    I am a UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology.
+    My long-term objective is to specialize in genome editing, CRISPR-Cas9 systems, and applied genetic research.
+  </p>
 </div>
 
 <h2>🧬 Academic Focus</h2>
 <ul>
-<li>Genetics Foundations</li>
-<li>Molecular Biology</li>
-<li>DNA Structure & Repair Mechanisms</li>
-<li>Genome Engineering</li>
-<li>CRISPR-Cas9 Systems</li>
+  <li>Genetics Foundations</li>
+  <li>Molecular Biology</li>
+  <li>DNA Structure & Repair Mechanisms</li>
+  <li>Genome Engineering</li>
+  <li>CRISPR-Cas9 Systems</li>
 </ul>
 
 <h2>🔬 CRISPR-Cas9 Overview</h2>
 <p>
-CRISPR-Cas9 is a genome editing technology in which the Cas9 enzyme, guided by RNA, targets specific DNA sequences and creates a double-strand break.
-Cellular repair mechanisms determine the final outcome:
+  CRISPR-Cas9 is a genome editing technology in which the Cas9 enzyme, guided by RNA, targets specific DNA sequences and creates a double-strand break.
+  Cellular repair mechanisms determine the final outcome:
 </p>
 <ul>
-<li><strong>NHEJ</strong> – error-prone repair (gene disruption)</li>
-<li><strong>HDR</strong> – precise sequence correction</li>
+  <li><strong>NHEJ</strong> – error-prone repair (gene disruption)</li>
+  <li><strong>HDR</strong> – precise sequence correction</li>
 </ul>
 
-<h2>🎥 Video Learning Log</h2>
+<h2>🎥 Video Learning Log (My Video)</h2>
 <iframe width="100%" height="315"
-src="https://www.youtube.com/embed/YYRYmbAho1U"
-frameborder="0"
-allowfullscreen>
+  src="https://www.youtube.com/embed/YYRYmbAho1U"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen>
 </iframe>
 
 <p>
-<a class="button" href="https://youtu.be/YYRYmbAho1U" target="_blank">
-Watch on YouTube
-</a>
+  <a class="button" href="https://youtu.be/YYRYmbAho1U" target="_blank" rel="noopener">
+    Watch on YouTube
+  </a>
 </p>
+
+<h2>📺 Recommended Educational Videos (Not Mine)</h2>
+<p class="warning">
+These videos are embedded for learning purposes and remain the property of their original creators.
+</p>
+
+<div class="video-grid">
+
+  <div class="video-card">
+    <h3>CRISPR-Cas9 Explained (Educational)</h3>
+    <iframe width="100%" height="315"
+      src="https://www.youtube.com/embed/6tw_JVz_IEc"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+    <p><a href="https://youtu.be/6tw_JVz_IEc" target="_blank" rel="noopener">Watch on YouTube</a></p>
+  </div>
+
+  <div class="video-card">
+    <h3>CRISPR / Gene Editing Overview (Educational)</h3>
+    <iframe width="100%" height="315"
+      src="https://www.youtube.com/embed/jAhjPd4uNFY?start=229"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+    <p><a href="https://www.youtube.com/watch?v=jAhjPd4uNFY&t=229s" target="_blank" rel="noopener">Watch on YouTube</a></p>
+  </div>
+
+  <div class="video-card">
+    <h3>CRISPR-Cas9 / Genome Editing (Educational)</h3>
+    <iframe width="100%" height="315"
+      src="https://www.youtube.com/embed/4YKFw2KZA5o"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+    <p><a href="https://youtu.be/4YKFw2KZA5o" target="_blank" rel="noopener">Watch on YouTube</a></p>
+  </div>
+
+</div>
 
 <h2>📚 Professional Research Resources</h2>
 
+<h3>Primary Textbook (UTRGV Library Access)</h3>
+<ul>
+  <li>
+    <a href="https://ebookcentral.proquest.com/lib/utrgv-ebooks/detail.action?docID=30781939" target="_blank" rel="noopener">
+      Goldberg, Michael L. (2023). <em>Genetics: From Genes to Genomes</em> (ProQuest Ebook Central)
+    </a>
+  </li>
+</ul>
+
 <h3>Databases Used by Researchers</h3>
 <ul>
-<li><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank">PubMed</a> – Biomedical research articles</li>
-<li><a href="https://www.ncbi.nlm.nih.gov/" target="_blank">NCBI</a> – Genetic & genomic databases</li>
-<li><a href="https://www.addgene.org/crispr/" target="_blank">Addgene CRISPR Resource Center</a></li>
-<li><a href="https://benchling.com/" target="_blank">Benchling</a> – Molecular biology workspace</li>
-<li><a href="https://www.biorxiv.org/" target="_blank">bioRxiv</a> – Open-access biology preprints</li>
+  <li><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed</a> – Biomedical research articles</li>
+  <li><a href="https://www.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">NCBI</a> – Genetic & genomic databases</li>
+  <li><a href="https://www.addgene.org/crispr/" target="_blank" rel="noopener">Addgene CRISPR Resource Center</a></li>
+  <li><a href="https://benchling.com/" target="_blank" rel="noopener">Benchling</a> – Molecular biology workspace</li>
+  <li><a href="https://www.biorxiv.org/" target="_blank" rel="noopener">bioRxiv</a> – Open-access biology preprints</li>
 </ul>
 
 <p class="warning">
@@ -139,32 +214,32 @@ Note: Some professional platforms require institutional access for full editing 
 
 <h2>🎓 Student Study Resources</h2>
 <ul>
-<li><a href="https://flowcv.com/" target="_blank">FlowCV</a> – Resume builder</li>
-<li><a href="https://www.purposegames.com/tag/bones" target="_blank">PurposeGames (Anatomy Practice)</a></li>
-<li>UTRGV Library Databases (Search CRISPR research papers)</li>
+  <li><a href="https://flowcv.com/" target="_blank" rel="noopener">FlowCV</a> – Resume builder</li>
+  <li><a href="https://www.purposegames.com/tag/bones" target="_blank" rel="noopener">PurposeGames (Anatomy Practice)</a></li>
+  <li>UTRGV Library Databases (Search CRISPR research papers)</li>
 </ul>
 
 <h2>🌍 Action & Activist Resources</h2>
 <ul>
-<li><a href="https://www.change.org/" target="_blank">Change.org</a></li>
-<li>Advocacy in ethical genome editing and responsible biotechnology policy</li>
+  <li><a href="https://www.change.org/" target="_blank" rel="noopener">Change.org</a></li>
+  <li>Advocacy in ethical genome editing and responsible biotechnology policy</li>
 </ul>
 
 <h2>🤝 Volunteer & Internship Opportunities</h2>
 <ul>
-<li>UTRGV Undergraduate Research Programs</li>
-<li>UTRGV Engaged Learning Office</li>
-<li>Oak Ridge National Laboratory (ORNL) Internships</li>
-<li>NSF Research Experiences for Undergraduates (REU)</li>
-<li>NIH Summer Internship Program</li>
+  <li>UTRGV Undergraduate Research Programs</li>
+  <li>UTRGV Engaged Learning Office</li>
+  <li>Oak Ridge National Laboratory (ORNL) Internships</li>
+  <li>NSF Research Experiences for Undergraduates (REU)</li>
+  <li>NIH Summer Internship Program</li>
 </ul>
 
 <h2>💙 Donate to Genetics & CRISPR Research</h2>
 <ul>
-<li><a href="https://www.genome.gov/" target="_blank">National Human Genome Research Institute (NHGRI)</a></li>
-<li><a href="https://www.stjude.org/" target="_blank">St. Jude Children’s Research Hospital</a></li>
-<li><a href="https://www.broadinstitute.org/" target="_blank">Broad Institute</a></li>
-<li><a href="https://www.crisprtx.com/" target="_blank">CRISPR Therapeutics</a></li>
+  <li><a href="https://www.genome.gov/" target="_blank" rel="noopener">National Human Genome Research Institute (NHGRI)</a></li>
+  <li><a href="https://www.stjude.org/" target="_blank" rel="noopener">St. Jude Children’s Research Hospital</a></li>
+  <li><a href="https://www.broadinstitute.org/" target="_blank" rel="noopener">Broad Institute</a></li>
+  <li><a href="https://www.crisprtx.com/" target="_blank" rel="noopener">CRISPR Therapeutics</a></li>
 </ul>
 
 <h2>📬 Contact</h2>
@@ -172,19 +247,16 @@ Note: Some professional platforms require institutional access for full editing 
 I am actively seeking research exposure and collaboration in genetics, molecular biology, and genome engineering.
 </p>
 
-<p><strong>Email:</strong> 
-<a href="mailto:mark250gonzalez@gmail.com">
-mark250gonzalez@gmail.com
-</a>
+<p><strong>Email:</strong>
+  <a href="mailto:mark250gonzalez@gmail.com">mark250gonzalez@gmail.com</a>
 </p>
 
-<p><strong>LinkedIn:</strong> 
-<a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank">
-linkedin.com/in/mark-gonzalez-858167266
-</a>
+<p><strong>LinkedIn:</strong>
+  <a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank" rel="noopener">
+    linkedin.com/in/mark-gonzalez-858167266
+  </a>
 </p>
 
 </div>
-
 </body>
 </html>
