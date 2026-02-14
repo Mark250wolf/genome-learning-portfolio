@@ -21,12 +21,20 @@ body {
   position: relative;
 }
 
-/* UTRGV Logo */
-.utrgv-logo {
+/* Top-right logos row */
+.top-logos {
   position: absolute;
   top: 20px;
   right: 30px;
-  width: 120px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.top-logos img {
+  width: 120px;   /* same size for all */
+  height: auto;
+  display: block;
 }
 
 h1 { color: #0b5fff; margin-top: 0; }
@@ -89,6 +97,7 @@ a:hover { text-decoration: underline; }
   .video-grid { grid-template-columns: 1fr 1fr; }
 }
 
+/* Photos */
 .photo {
   width: 100%;
   max-width: 760px;
@@ -96,175 +105,201 @@ a:hover { text-decoration: underline; }
   display: block;
   margin: 14px 0;
 }
+
+/* CRISPR tools image */
+.tools-image {
+  width: 100%;
+  max-width: 900px;
+  border-radius: 10px;
+  display: block;
+  margin: 14px 0;
+  border: 1px solid #e6e6e6;
+}
+
+.caption {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #555;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<img src="utrgv-logo.png" alt="UTRGV Logo" class="utrgv-logo">
+  <!-- Top-right Logos (same size, next to each other) -->
+  <div class="top-logos">
+    <img src="utrgv-logo.png" alt="UTRGV Logo">
+    <img src="ivc-logo.png" alt="IVC Logo">
+    <img src="usmc-logo.png" alt="USMC Logo">
+  </div>
 
-<h1>Genome Learning Portfolio</h1>
-<p><strong>Path to Becoming a Geneticist | Genome Engineering & CRISPR-Cas9</strong></p>
+  <h1>Genome Learning Portfolio</h1>
+  <p><strong>Path to Becoming a Geneticist | Genome Engineering & CRISPR-Cas9</strong></p>
 
-<div class="profile">
-  <img src="profile.jpg" alt="Mark Gonzalez">
+  <div class="profile">
+    <img src="profile.jpg" alt="Mark Gonzalez">
+    <p>
+      UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology.
+      Long-term objective: specialization in genome editing, CRISPR-Cas9 systems, and applied genetic research.
+    </p>
+  </div>
+
+  <h2>🧬 Academic Focus</h2>
+  <ul>
+    <li>Genetics Foundations</li>
+    <li>Molecular Biology</li>
+    <li>DNA Repair Mechanisms</li>
+    <li>Genome Engineering</li>
+    <li>CRISPR-Cas9 Systems</li>
+  </ul>
+
+  <h2>🔬 CRISPR-Cas9 Overview</h2>
   <p>
-    UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology.
-    Long-term objective: specialization in genome editing, CRISPR-Cas9 systems, and applied genetic research.
+    CRISPR-Cas9 enables precise genome editing by using guide RNA to direct the Cas9 enzyme to a specific DNA sequence, where it introduces a double-strand break.
+    Repair occurs through NHEJ (gene disruption) or HDR (precise correction).
   </p>
-</div>
 
-<h2>🧬 Academic Focus</h2>
-<ul>
-  <li>Genetics Foundations</li>
-  <li>Molecular Biology</li>
-  <li>DNA Repair Mechanisms</li>
-  <li>Genome Engineering</li>
-  <li>CRISPR-Cas9 Systems</li>
-</ul>
+  <!-- CRISPR Tools Image -->
+  <h2>🧰 CRISPR-Cas9 Tools & Instruments</h2>
+  <img class="tools-image" src="crisper-tools.png" alt="CRISPR-Cas9 tools and instruments diagram">
+  <p class="caption">Diagram of common instruments and components used in CRISPR-Cas9 workflows.</p>
 
-<h2>🔬 CRISPR-Cas9 Overview</h2>
-<p>
-CRISPR-Cas9 enables precise genome editing by using guide RNA to direct the Cas9 enzyme to a specific DNA sequence, where it introduces a double-strand break.
-Repair occurs through NHEJ (gene disruption) or HDR (precise correction).
-</p>
+  <h2>🎥 My Videos (Episodes 1–6)</h2>
 
-<h2>🎥 My Videos (Episodes 1–6)</h2>
+  <div class="video-grid">
 
-<div class="video-grid">
+    <div class="video-card">
+      <h3>Episode 1</h3>
+      <iframe
+        src="https://www.youtube.com/embed/0IcY4fyuFJE"
+        title="Episode 1"
+        allowfullscreen>
+      </iframe>
+    </div>
 
-  <div class="video-card">
-    <h3>Episode 1</h3>
-    <iframe
-      src="https://www.youtube.com/embed/0IcY4fyuFJE"
-      title="Episode 1"
-      allowfullscreen>
-    </iframe>
+    <div class="video-card">
+      <h3>Episode 2</h3>
+      <iframe
+        src="https://www.youtube.com/embed/2YV2Sl9JPOI"
+        title="Episode 2"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-card">
+      <h3>Episode 3</h3>
+      <iframe
+        src="https://www.youtube.com/embed/izsVuHdGwd4"
+        title="Episode 3"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-card">
+      <h3>Episode 4</h3>
+      <iframe
+        src="https://www.youtube.com/embed/T1fLOS7Vt2Y"
+        title="Episode 4"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-card">
+      <h3>Episode 5</h3>
+      <iframe
+        src="https://www.youtube.com/embed/XIeCxjdMB2A"
+        title="Episode 5"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-card">
+      <h3>Episode 6</h3>
+      <iframe
+        src="https://www.youtube.com/embed/f2OUl9YPUzo"
+        title="Episode 6"
+        allowfullscreen>
+      </iframe>
+    </div>
+
   </div>
 
-  <div class="video-card">
-    <h3>Episode 2</h3>
-    <iframe
-      src="https://www.youtube.com/embed/2YV2Sl9JPOI"
-      title="Episode 2"
-      allowfullscreen>
-    </iframe>
+  <h2>📺 Recommended Educational Videos</h2>
+  <p class="warning">Embedded for educational purposes. Credit to original creators.</p>
+
+  <div class="video-grid">
+
+    <div class="video-card">
+      <h3>CRISPR Explained</h3>
+      <iframe
+        src="https://www.youtube.com/embed/6tw_JVz_IEc"
+        title="CRISPR Explained"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-card">
+      <h3>Gene Editing Overview</h3>
+      <iframe
+        src="https://www.youtube.com/embed/jAhjPd4uNFY?start=229"
+        title="Gene Editing Overview"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-card">
+      <h3>Genome Editing Deep Dive</h3>
+      <iframe
+        src="https://www.youtube.com/embed/4YKFw2KZA5o"
+        title="Genome Editing Deep Dive"
+        allowfullscreen>
+      </iframe>
+    </div>
+
   </div>
 
-  <div class="video-card">
-    <h3>Episode 3</h3>
-    <iframe
-      src="https://www.youtube.com/embed/izsVuHdGwd4"
-      title="Episode 3"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <h2>🧪 Research Engagement & Networking</h2>
+  <p>Attended Oak Ridge National Laboratory research presentation at UTRGV.</p>
 
-  <div class="video-card">
-    <h3>Episode 4</h3>
-    <iframe
-      src="https://www.youtube.com/embed/T1fLOS7Vt2Y"
-      title="Episode 4"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <h3>With Dr. Megan E. Keniry</h3>
+  <img class="photo" src="ornl-megan-keniry-2026.jpeg" alt="With Dr. Megan E. Keniry">
+  <p>Discussed pathways toward undergraduate research in molecular genetics and genome editing.</p>
 
-  <div class="video-card">
-    <h3>Episode 5</h3>
-    <iframe
-      src="https://www.youtube.com/embed/XIeCxjdMB2A"
-      title="Episode 5"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <h3>With Dr. Ahmed Arabi Hassen</h3>
+  <img class="photo" src="ornl-ahmed-hassen-2026.jpeg" alt="With Dr. Ahmed Arabi Hassen">
+  <p>Discussed research environments within national laboratories and biotechnology applications.</p>
 
-  <div class="video-card">
-    <h3>Episode 6</h3>
-    <iframe
-      src="https://www.youtube.com/embed/f2OUl9YPUzo"
-      title="Episode 6"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <h3>ORNL Research Event Group Photo</h3>
+  <img class="photo" src="ornl-group-photo-2026.jpeg" alt="ORNL Research Event Group Photo">
 
-</div>
+  <h2>📚 Professional Research Resources</h2>
+  <ul>
+    <li><a href="https://ebookcentral.proquest.com/lib/utrgv-ebooks/detail.action?docID=30781939" target="_blank" rel="noopener">Goldberg (2023) – Genetics: From Genes to Genomes</a></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed</a></li>
+    <li><a href="https://www.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">NCBI</a></li>
+    <li><a href="https://www.addgene.org/crispr/" target="_blank" rel="noopener">Addgene CRISPR Center</a></li>
+    <li><a href="https://benchling.com/" target="_blank" rel="noopener">Benchling</a></li>
+    <li><a href="https://www.biorxiv.org/" target="_blank" rel="noopener">bioRxiv</a></li>
+  </ul>
 
-<h2>📺 Recommended Educational Videos</h2>
-<p class="warning">Embedded for educational purposes. Credit to original creators.</p>
+  <h2>🎓 Student Resources</h2>
+  <ul>
+    <li><a href="https://flowcv.com/" target="_blank" rel="noopener">FlowCV</a></li>
+    <li><a href="https://www.purposegames.com/tag/bones" target="_blank" rel="noopener">PurposeGames</a></li>
+  </ul>
 
-<div class="video-grid">
+  <h2>💙 Donate to Genetics Research</h2>
+  <ul>
+    <li><a href="https://www.genome.gov/" target="_blank" rel="noopener">NHGRI</a></li>
+    <li><a href="https://www.stjude.org/" target="_blank" rel="noopener">St. Jude</a></li>
+    <li><a href="https://www.broadinstitute.org/" target="_blank" rel="noopener">Broad Institute</a></li>
+    <li><a href="https://www.crisprtx.com/" target="_blank" rel="noopener">CRISPR Therapeutics</a></li>
+  </ul>
 
-  <div class="video-card">
-    <h3>CRISPR Explained</h3>
-    <iframe
-      src="https://www.youtube.com/embed/6tw_JVz_IEc"
-      title="CRISPR Explained"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-  <div class="video-card">
-    <h3>Gene Editing Overview</h3>
-    <iframe
-      src="https://www.youtube.com/embed/jAhjPd4uNFY?start=229"
-      title="Gene Editing Overview"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-  <div class="video-card">
-    <h3>Genome Editing Deep Dive</h3>
-    <iframe
-      src="https://www.youtube.com/embed/4YKFw2KZA5o"
-      title="Genome Editing Deep Dive"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-</div>
-
-<h2>🧪 Research Engagement & Networking</h2>
-<p>Attended Oak Ridge National Laboratory research presentation at UTRGV.</p>
-
-<h3>With Dr. Megan E. Keniry</h3>
-<img class="photo" src="ornl-megan-keniry-2026.jpeg" alt="With Dr. Megan E. Keniry">
-<p>Discussed pathways toward undergraduate research in molecular genetics and genome editing.</p>
-
-<h3>With Dr. Ahmed Arabi Hassen</h3>
-<img class="photo" src="ornl-ahmed-hassen-2026.jpeg" alt="With Dr. Ahmed Arabi Hassen">
-<p>Discussed research environments within national laboratories and biotechnology applications.</p>
-
-<h3>ORNL Research Event Group Photo</h3>
-<img class="photo" src="ornl-group-photo-2026.jpeg" alt="ORNL Research Event Group Photo">
-
-<h2>📚 Professional Research Resources</h2>
-<ul>
-  <li><a href="https://ebookcentral.proquest.com/lib/utrgv-ebooks/detail.action?docID=30781939" target="_blank" rel="noopener">Goldberg (2023) – Genetics: From Genes to Genomes</a></li>
-  <li><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed</a></li>
-  <li><a href="https://www.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">NCBI</a></li>
-  <li><a href="https://www.addgene.org/crispr/" target="_blank" rel="noopener">Addgene CRISPR Center</a></li>
-  <li><a href="https://benchling.com/" target="_blank" rel="noopener">Benchling</a></li>
-  <li><a href="https://www.biorxiv.org/" target="_blank" rel="noopener">bioRxiv</a></li>
-</ul>
-
-<h2>🎓 Student Resources</h2>
-<ul>
-  <li><a href="https://flowcv.com/" target="_blank" rel="noopener">FlowCV</a></li>
-  <li><a href="https://www.purposegames.com/tag/bones" target="_blank" rel="noopener">PurposeGames</a></li>
-</ul>
-
-<h2>💙 Donate to Genetics Research</h2>
-<ul>
-  <li><a href="https://www.genome.gov/" target="_blank" rel="noopener">NHGRI</a></li>
-  <li><a href="https://www.stjude.org/" target="_blank" rel="noopener">St. Jude</a></li>
-  <li><a href="https://www.broadinstitute.org/" target="_blank" rel="noopener">Broad Institute</a></li>
-  <li><a href="https://www.crisprtx.com/" target="_blank" rel="noopener">CRISPR Therapeutics</a></li>
-</ul>
-
-<h2>📬 Contact</h2>
-<p>Email: <a href="mailto:mark250gonzalez@gmail.com">mark250gonzalez@gmail.com</a></p>
-<p>LinkedIn: <a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank" rel="noopener">linkedin.com/in/mark-gonzalez-858167266</a></p>
+  <h2>📬 Contact</h2>
+  <p>Email: <a href="mailto:mark250gonzalez@gmail.com">mark250gonzalez@gmail.com</a></p>
+  <p>LinkedIn: <a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank" rel="noopener">linkedin.com/in/mark-gonzalez-858167266</a></p>
 
 </div>
 </body>
