@@ -580,7 +580,6 @@ function renderSeq(){
   document.getElementById("seqList").innerHTML=DB.seqMeta.map(s=>`<div class="card"><b>${esc(s.file)}</b> (${esc(s.size)} bytes)<p>${esc(s.species)} · ${esc(s.kind||"unclassified by user")}</p><p class="muted">${esc(s.note)}</p></div>`).join("")||"<p class='muted'>No sequence files yet.</p>";
 }
 function protoView(){
-  const owned=DB.equip.filter(e=>e.status==="Owned").map(e=>e.name);
   document.getElementById("view").innerHTML=`<h1>Laboratory Protocols</h1>
   <p class="note">This matcher compares a research objective with owned vs planned gear and points to published sources. It does not invent temperatures, recipes, CRISPR cutting steps, or sterilization substitutes. Unknown environmental microbes are not assumed safe to culture at home. Supervisor review is required for wet-lab DNA work.</p>
   <input id="prObj" placeholder="Research objective e.g. photograph edible mushroom specimens">
