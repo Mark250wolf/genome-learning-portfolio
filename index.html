@@ -33,7 +33,6 @@ body {
   text-decoration: none;
 }
 .research-nav button.active { color: #67e8f9; font-weight: bold; }
-.research-nav .brand { color: #67e8f9; font-weight: bold; margin-right: 8px; }
 .container {
   max-width: 1000px;
   margin: 0 auto;
@@ -61,30 +60,28 @@ a:hover { text-decoration: underline; }
 .warning { font-size: 14px; color: #cc0000; }
 .video-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 16px; }
 .video-card { border: 1px solid #e6e6e6; border-radius: 10px; padding: 14px; }
-.video-card iframe, .video-single iframe { width: 100%; height: 315px; border: 0; }
+.video-card iframe { width: 100%; height: 315px; border: 0; }
 @media (min-width: 860px) { .video-grid { grid-template-columns: 1fr 1fr; } }
 .photo { width: 100%; max-width: 760px; border-radius: 10px; display: block; margin: 14px 0; }
 .tools-image { width: 100%; max-width: 900px; border-radius: 10px; display: block; margin: 14px 0; border: 1px solid #e6e6e6; }
 .caption { margin-top: 6px; font-size: 14px; color: #555; }
-
 .dash { display: none; background: #020617; color: #e2e8f0; min-height: 100vh; padding: 24px; }
 .dash.on { display: block; }
 .wrap { max-width: 1100px; margin: 0 auto; }
 .dash h1, .dash h2 { color: #67e8f9; margin-top: 0; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; }
 .dash input, .dash select, .dash textarea {
   width: 100%; box-sizing: border-box; margin: 6px 0; padding: 8px;
   background: #020617; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px;
 }
-.dash button.go {
+.dash button.go, .dash button.more {
   background: #67e8f9; color: #020617; border: 0; padding: 8px 14px;
-  border-radius: 6px; font-weight: bold; cursor: pointer;
+  border-radius: 6px; font-weight: bold; cursor: pointer; margin: 6px 6px 6px 0;
 }
 .muted { color: #94a3b8; font-size: 14px; }
 .err { color: #fca5a5; }
+.note { color: #fde68a; font-size: 14px; }
 pre { white-space: pre-wrap; font-size: 13px; }
-img.hit { max-width: 280px; border-radius: 8px; }
 .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 14px 0; }
 .cat-btn {
   background: #0b3a4a; color: #ecfeff; border: 1px solid #22d3ee; border-radius: 10px;
@@ -92,35 +89,34 @@ img.hit { max-width: 280px; border-radius: 8px; }
 }
 .cat-btn:hover { background: #155e75; }
 .cat-btn.on { background: #67e8f9; color: #020617; }
+.catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
+.catalog .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: #1e293b; }
+.catalog .card { text-align: left; cursor: pointer; }
+.catalog .card:hover { border-color: #67e8f9; }
+.gene-row { border-top: 1px solid #1e293b; padding: 10px 0; }
+.ph { width: 100%; height: 160px; border-radius: 8px; background: #1e293b; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; }
 </style>
 </head>
 <body>
 
 <div class="research-nav">
-  <span class="brand">Genome Research &amp; Genetic Engineering AI</span>
   <button class="active" data-view="portfolio" type="button">Learning Portfolio</button>
-  <button data-view="dash" data-mod="home" type="button">Dashboard</button>
   <button data-view="dash" data-mod="species" type="button">Species</button>
   <button data-view="dash" data-mod="genes" type="button">Genes</button>
-  <button data-view="dash" data-mod="interests" type="button">Interests</button>
   <button data-view="dash" data-mod="assistant" type="button">AI Assistant</button>
   <button data-view="dash" data-mod="bio" type="button">Bioinformatics</button>
-  <button data-view="dash" data-mod="notebook" type="button">Notebook</button>
   <button data-view="dash" data-mod="workflows" type="button">Workflows</button>
 </div>
 
 <div id="portfolio">
 <div class="container">
-
   <div class="top-logos">
     <img src="utrgv-logo.png" alt="UTRGV Logo">
     <img src="ivc-logo.png" alt="IVC Logo">
     <img src="usmc-logo.png" alt="USMC Logo">
   </div>
-
   <h1>Genome Learning Portfolio</h1>
   <p><strong>Path to Becoming a Geneticist | Genome Engineering & CRISPR-Cas9</strong></p>
-
   <div class="profile">
     <img src="profile.jpg" alt="Mark Gonzalez">
     <p>
@@ -128,7 +124,6 @@ img.hit { max-width: 280px; border-radius: 8px; }
       Long-term objective: specialization in genome editing, CRISPR-Cas9 systems, and applied genetic research.
     </p>
   </div>
-
   <h2>🧬 Academic Focus</h2>
   <ul>
     <li>Genetics Foundations</li>
@@ -137,17 +132,14 @@ img.hit { max-width: 280px; border-radius: 8px; }
     <li>Genome Engineering</li>
     <li>CRISPR-Cas9 Systems</li>
   </ul>
-
   <h2>🔬 CRISPR-Cas9 Overview</h2>
   <p>
     CRISPR-Cas9 enables precise genome editing by using guide RNA to direct the Cas9 enzyme to a specific DNA sequence, where it introduces a double-strand break.
     Repair occurs through NHEJ (gene disruption) or HDR (precise correction).
   </p>
-
   <h2>🧰 CRISPR-Cas9 Tools & Instruments</h2>
   <img class="tools-image" src="crisper-tools.png" alt="CRISPR-Cas9 tools and instruments diagram">
   <p class="caption">Diagram of common instruments and components used in CRISPR-Cas9 workflows.</p>
-
   <h2>🎥 My Videos (Episodes 1–6)</h2>
   <div class="video-grid">
     <div class="video-card"><h3>Episode 1</h3><iframe src="https://www.youtube.com/embed/0IcY4fyuFJE" title="Episode 1" allowfullscreen></iframe></div>
@@ -157,7 +149,6 @@ img.hit { max-width: 280px; border-radius: 8px; }
     <div class="video-card"><h3>Episode 5</h3><iframe src="https://www.youtube.com/embed/XIeCxjdMB2A" title="Episode 5" allowfullscreen></iframe></div>
     <div class="video-card"><h3>Episode 6</h3><iframe src="https://www.youtube.com/embed/f2OUl9YPUzo" title="Episode 6" allowfullscreen></iframe></div>
   </div>
-
   <h2>📺 Recommended Educational Videos</h2>
   <p class="warning">Embedded for educational purposes. Credit to original creators.</p>
   <div class="video-grid">
@@ -165,7 +156,6 @@ img.hit { max-width: 280px; border-radius: 8px; }
     <div class="video-card"><h3>Gene Editing Overview</h3><iframe src="https://www.youtube.com/embed/jAhjPd4uNFY?start=229" title="Gene Editing Overview" allowfullscreen></iframe></div>
     <div class="video-card"><h3>Genome Editing Deep Dive</h3><iframe src="https://www.youtube.com/embed/4YKFw2KZA5o" title="Genome Editing Deep Dive" allowfullscreen></iframe></div>
   </div>
-
   <h2>🧪 Research Engagement & Networking</h2>
   <p>Attended Oak Ridge National Laboratory research presentation at UTRGV.</p>
   <h3>With Dr. Megan E. Keniry</h3>
@@ -176,7 +166,6 @@ img.hit { max-width: 280px; border-radius: 8px; }
   <p>Discussed research environments within national laboratories and biotechnology applications.</p>
   <h3>ORNL Research Event Group Photo</h3>
   <img class="photo" src="ornl-group-photo-2026.jpeg" alt="ORNL Research Event Group Photo">
-
   <h2>📚 Professional Research Resources</h2>
   <ul>
     <li><a href="https://ebookcentral.proquest.com/lib/utrgv-ebooks/detail.action?docID=30781939" target="_blank" rel="noopener">Goldberg (2023) – Genetics: From Genes to Genomes</a></li>
@@ -186,14 +175,12 @@ img.hit { max-width: 280px; border-radius: 8px; }
     <li><a href="https://benchling.com/" target="_blank" rel="noopener">Benchling</a></li>
     <li><a href="https://www.biorxiv.org/" target="_blank" rel="noopener">bioRxiv</a></li>
   </ul>
-
   <h2>🎓 Student Resources</h2>
   <ul>
     <li><a href="https://flowcv.com/" target="_blank" rel="noopener">FlowCV</a></li>
     <li><a href="https://www.purposegames.com/tag/bones" target="_blank" rel="noopener">PurposeGames</a></li>
     <li><a href="https://www.change.org/" target="_blank" rel="noopener">Change.org</a></li>
   </ul>
-
   <h2>💙 Donate to Genetics Research</h2>
   <ul>
     <li><a href="https://www.genome.gov/" target="_blank" rel="noopener">NHGRI</a></li>
@@ -201,119 +188,57 @@ img.hit { max-width: 280px; border-radius: 8px; }
     <li><a href="https://www.broadinstitute.org/" target="_blank" rel="noopener">Broad Institute</a></li>
     <li><a href="https://www.crisprtx.com/" target="_blank" rel="noopener">CRISPR Therapeutics</a></li>
   </ul>
-
   <h2>📬 Contact</h2>
   <p>Email: <a href="mailto:mark250gonzalez@gmail.com">mark250gonzalez@gmail.com</a></p>
   <p>LinkedIn: <a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank" rel="noopener">linkedin.com/in/mark-gonzalez-858167266</a></p>
-
 </div>
 </div>
 
 <div id="dash" class="dash">
   <div class="wrap">
-    <section data-mod="home">
-      <h1>Research dashboard</h1>
-      <p class="muted">Live lookups use NCBI, GBIF, Ensembl, and UniProt. Missing records are labeled unavailable. Nothing is invented. Notes are stored in this browser only.</p>
-      <h2>All species map</h2>
-      <div id="homeCats" class="cats"></div>
-      <div class="grid" style="margin-top:16px">
-        <div class="card"><b>1. Species Explorer</b><p class="muted">NCBI Taxonomy + GBIF</p></div>
-        <div class="card"><b>2. Genes & Abilities</b><p class="muted">NCBI Gene + UniProt</p></div>
-        <div class="card"><b>3. Research Interests</b><p class="muted">Saved locally</p></div>
-        <div class="card"><b>4. AI Assistant</b><p class="muted">Evidence-label checklist (no wet-lab protocols)</p></div>
-        <div class="card"><b>5. Bioinformatics</b><p class="muted">Sequence viewer + BLAST/Ensembl/UCSC/PDB links</p></div>
-        <div class="card"><b>6. Notebook</b><p class="muted">Project notes in this browser</p></div>
-        <div class="card"><b>7. Workflows</b><p class="muted">Computational plans only</p></div>
-      </div>
-    </section>
-
-    <section data-mod="species" hidden>
-      <h1>Species Explorer</h1>
-      <p class="muted">Choose a group, then search NCBI Taxonomy. Click a species for taxonomy, genome links, and GBIF images when available. Parasite is a lifestyle, not a kingdom, so that list uses well-known parasitic species from NCBI.</p>
+    <section data-mod="species">
+      <h1>Species catalog</h1>
+      <p class="muted">Select human, animal, plant, bacteria, virus, fungi, mold, parasite, amoeba, or archaea. Cards show image, name, where found, then NCBI genes and annotation abilities.</p>
       <div id="spCats" class="cats"></div>
-      <input id="spQ" placeholder="Search a name inside this group, e.g. Danio rerio">
-      <button class="go" type="button" onclick="searchSpecies()">Search NCBI</button>
       <p id="spErr" class="err"></p>
-      <div id="spOut"></div>
+      <div id="spOut" class="catalog"></div>
+      <div id="genePanel"></div>
     </section>
-
     <section data-mod="genes" hidden>
-      <h1>Genes &amp; Abilities</h1>
-      <p class="muted">Ability tags are keyword matches on UniProt/NCBI text and are labeled predicted or unknown — not experimental proof from this site.</p>
+      <h1>Gene search</h1>
       <input id="gQ" value="TP53" placeholder="Gene symbol">
       <input id="gSp" value="Homo sapiens" placeholder="Species">
       <button class="go" type="button" onclick="searchGenes()">Search genes</button>
       <p id="gErr" class="err"></p>
       <div id="gOut"></div>
     </section>
-
-    <section data-mod="interests" hidden>
-      <h1>Research Interests</h1>
-      <input id="iSpecies" placeholder="Species">
-      <input id="iGene" placeholder="Gene">
-      <input id="iAbility" placeholder="Biological ability">
-      <select id="iPri"><option>High</option><option selected>Medium</option><option>Low</option></select>
-      <select id="iCat">
-        <option>regenerative abilities</option>
-        <option>physical adaptations</option>
-        <option>metabolic abilities</option>
-        <option>environmental resistance</option>
-        <option>sensory abilities</option>
-        <option>disease resistance</option>
-        <option selected>cellular repair</option>
-      </select>
-      <textarea id="iNotes" placeholder="Notes / evidence (cite NCBI/UniProt IDs)"></textarea>
-      <button class="go" type="button" onclick="saveInterest()">Save</button>
-      <div id="iOut"></div>
-    </section>
-
     <section data-mod="assistant" hidden>
       <h1>AI Research Assistant</h1>
-      <p class="muted">This GitHub Pages file cannot call OpenAI. Use this checklist so answers stay honest. Do not treat gene combinations as proven enhancements. No wet-lab editing protocols.</p>
-      <textarea id="aQ" rows="4">Compare published functions of TP53 and BRCA1. Label each claim CONFIRMED SCIENCE, COMPUTATIONAL PREDICTION, or SPECULATIVE HYPOTHESIS.</textarea>
-      <div class="card">
-        <p>1. Look up each gene on NCBI Gene, Ensembl, and UniProt.</p>
-        <p>2. Copy identifiers. If a field is missing, write unavailable.</p>
-        <p>3. Label functions from those records as confirmed (stated in the database), predicted (computational annotation), or unknown.</p>
-        <p>4. For literature, search PubMed and cite PMIDs.</p>
-        <p>5. Lab work stays with approved institutional protocols.</p>
-        <p><a href="https://www.ncbi.nlm.nih.gov/gene" target="_blank" rel="noopener">NCBI Gene</a> ·
-           <a href="https://www.uniprot.org" target="_blank" rel="noopener">UniProt</a> ·
-           <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener">PubMed</a></p>
-      </div>
+      <p class="note">This site will not invent new genes or theoretical engineered abilities.</p>
+      <textarea id="aQ" rows="4">Compare published NCBI/UniProt functions for TP53. What is confirmed vs unknown?</textarea>
+      <button class="go" type="button" onclick="assist()">Organize hypothesis from published data</button>
+      <pre id="aOut"></pre>
     </section>
-
     <section data-mod="bio" hidden>
       <h1>Bioinformatics</h1>
-      <textarea id="fa" rows="5">&gt;example
-ATGCGTACGTAGCTAGCTAGCTAG</textarea>
-      <button class="go" type="button" onclick="viewSeq()">View sequence</button>
+      <p class="note">This page does not generate PCR primer sequences. Use NCBI Primer-BLAST in an approved class if needed.</p>
+      <input id="bioQ" placeholder="Search a published gene name, e.g. TP53">
+      <input id="bioSp" value="Homo sapiens" placeholder="Species">
+      <button class="go" type="button" onclick="bioSearch()">Search gene record</button>
+      <p id="bioErr" class="err"></p>
+      <div id="bioOut"></div>
+      <textarea id="fa" rows="4" placeholder="Paste a FASTA you copied from NCBI"></textarea>
+      <button class="go" type="button" onclick="viewSeq()">View pasted sequence</button>
       <pre id="faOut"></pre>
-      <p>
-        <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" target="_blank" rel="noopener">NCBI BLAST</a> ·
-        <a href="https://ensembl.org" target="_blank" rel="noopener">Ensembl</a> ·
-        <a href="https://genome.ucsc.edu/cgi-bin/hgGateway" target="_blank" rel="noopener">UCSC Genome Browser</a> ·
-        <a href="https://www.uniprot.org" target="_blank" rel="noopener">UniProt</a> ·
-        <a href="https://www.rcsb.org" target="_blank" rel="noopener">RCSB PDB</a> ·
-        <a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">Primer-BLAST (educational)</a>
-      </p>
+      <p><a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">NCBI Primer-BLAST</a></p>
     </section>
-
-    <section data-mod="notebook" hidden>
-      <h1>Research Notebook</h1>
-      <input id="nTitle" placeholder="Project title">
-      <textarea id="nBody" rows="4" placeholder="Question, hypothesis, species, genes, computational notes"></textarea>
-      <button class="go" type="button" onclick="saveNote()">Save project</button>
-      <div id="nOut"></div>
-    </section>
-
     <section data-mod="workflows" hidden>
       <h1>Computational workflow</h1>
-      <p class="muted">Educational computational plans only. Requests that look like wet-lab genome editing are not generated here.</p>
-      <input id="wSp" placeholder="Species" value="Homo sapiens">
-      <input id="wGene" placeholder="Gene" value="TP53">
-      <input id="wObj" placeholder="Objective" value="Map public identifiers and published functions">
-      <button class="go" type="button" onclick="makePlan()">Generate plan</button>
+      <p class="note">No CRISPR lab steps, DNA extraction, PCR, or freezing protocols are provided here.</p>
+      <input id="wSp" value="Homo sapiens">
+      <input id="wGene" value="TP53">
+      <input id="wObj" value="Map public identifiers and published functions">
+      <button class="go" type="button" onclick="makePlan()">Generate computational plan</button>
       <pre id="wOut"></pre>
     </section>
   </div>
@@ -322,45 +247,27 @@ ATGCGTACGTAGCTAGCTAGCTAG</textarea>
 <script>
 const EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
 const NAV = document.querySelectorAll(".research-nav button");
-const KEYS = ["regeneration","bioluminescence","dna repair","heat","cold","radiation","longevity","immune","photosynth","pigment","metabol","opsin","olfactory"];
+const KEYS = ["regeneration","bioluminescence","dna repair","heat","cold","radiation","longevity","immune","photosynth","pigment","metabol","opsin","olfactory","repair","kinase","transcription"];
 const GROUPS = [
-  { id: "human", label: "human", filter: "Homo sapiens[Scientific Name]", examples: ["Homo sapiens"] },
-  { id: "animal", label: "animal", filter: "Metazoa[Subtree]", examples: ["Mus musculus","Danio rerio","Drosophila melanogaster","Caenorhabditis elegans","Gallus gallus","Bos taurus","Canis lupus familiaris","Felis catus"] },
-  { id: "plant", label: "plant", filter: "Viridiplantae[Subtree]", examples: ["Arabidopsis thaliana","Oryza sativa","Zea mays","Solanum lycopersicum","Glycine max","Triticum aestivum"] },
-  { id: "bacteria", label: "bacteria", filter: "Bacteria[Subtree]", examples: ["Escherichia coli","Bacillus subtilis","Staphylococcus aureus","Pseudomonas aeruginosa","Mycobacterium tuberculosis"] },
-  { id: "virus", label: "virus", filter: "Viruses[Subtree]", examples: ["Influenza A virus","Severe acute respiratory syndrome coronavirus 2","Human immunodeficiency virus 1","Tobacco mosaic virus","Bacteriophage lambda"] },
-  { id: "fungi", label: "fungi", filter: "Fungi[Subtree]", examples: ["Saccharomyces cerevisiae","Neurospora crassa","Schizosaccharomyces pombe","Candida albicans","Cryptococcus neoformans"] },
-  { id: "mold", label: "mold", filter: "(Eurotiales[Subtree] OR Mucorales[Subtree] OR Aspergillus OR Penicillium OR Rhizopus)", examples: ["Aspergillus niger","Aspergillus nidulans","Penicillium chrysogenum","Rhizopus stolonifer","Neurospora crassa"] },
-  { id: "parasite", label: "parasite", filter: "(Plasmodium OR Trypanosoma OR Schistosoma OR Giardia OR Leishmania OR Toxoplasma)", examples: ["Plasmodium falciparum","Trypanosoma brucei","Schistosoma mansoni","Giardia intestinalis","Toxoplasma gondii","Leishmania major"] },
-  { id: "amoeba", label: "amoeba", filter: "(Amoebozoa[Subtree] OR Entamoeba OR Amoeba proteus OR Dictyostelium)", examples: ["Entamoeba histolytica","Dictyostelium discoideum","Amoeba proteus","Acanthamoeba castellanii"] },
-  { id: "archaea", label: "archaea", filter: "Archaea[Subtree]", examples: ["Methanocaldococcus jannaschii","Haloferax volcanii","Sulfolobus acidocaldarius","Pyrococcus furiosus","Methanosarcina mazei"] }
+  { id: "human", label: "human", examples: ["Homo sapiens"] },
+  { id: "animal", label: "animal", examples: ["Mus musculus","Danio rerio","Drosophila melanogaster","Caenorhabditis elegans","Gallus gallus","Bos taurus","Canis lupus familiaris","Felis catus"] },
+  { id: "plant", label: "plant", examples: ["Arabidopsis thaliana","Oryza sativa","Zea mays","Solanum lycopersicum","Glycine max","Triticum aestivum"] },
+  { id: "bacteria", label: "bacteria", examples: ["Escherichia coli","Bacillus subtilis","Staphylococcus aureus","Pseudomonas aeruginosa","Mycobacterium tuberculosis"] },
+  { id: "virus", label: "virus", examples: ["Influenza A virus","Severe acute respiratory syndrome coronavirus 2","Human immunodeficiency virus 1","Tobacco mosaic virus"] },
+  { id: "fungi", label: "fungi", examples: ["Saccharomyces cerevisiae","Neurospora crassa","Schizosaccharomyces pombe","Candida albicans","Cryptococcus neoformans"] },
+  { id: "mold", label: "mold", examples: ["Aspergillus niger","Aspergillus nidulans","Penicillium chrysogenum","Rhizopus stolonifer"] },
+  { id: "parasite", label: "parasite", examples: ["Plasmodium falciparum","Trypanosoma brucei","Schistosoma mansoni","Giardia intestinalis","Toxoplasma gondii"] },
+  { id: "amoeba", label: "amoeba", examples: ["Entamoeba histolytica","Dictyostelium discoideum","Amoeba proteus","Acanthamoeba castellanii"] },
+  { id: "archaea", label: "archaea", examples: ["Methanocaldococcus jannaschii","Haloferax volcanii","Sulfolobus acidocaldarius","Pyrococcus furiosus"] }
 ];
-let currentGroup = "animal";
+let currentGroup = "human";
+let geneRetstart = 0;
 
 function renderCats() {
-  const html = GROUPS.map(g => `<button type="button" class="cat-btn${g.id === currentGroup ? " on" : ""}" onclick="pickGroup('${g.id}')">${g.label}</button>`).join("");
-  const home = document.getElementById("homeCats");
-  const sp = document.getElementById("spCats");
-  if (home) home.innerHTML = html;
-  if (sp) sp.innerHTML = html;
+  document.getElementById("spCats").innerHTML = GROUPS.map(g =>
+    `<button type="button" class="cat-btn${g.id === currentGroup ? " on" : ""}" onclick="pickGroup('${g.id}')">${g.label}</button>`
+  ).join("");
 }
-function openDash(mod) {
-  document.querySelectorAll(".research-nav button").forEach(x => {
-    x.classList.toggle("active", x.dataset.view === "dash" && x.dataset.mod === mod);
-  });
-  document.getElementById("portfolio").style.display = "none";
-  document.getElementById("dash").classList.add("on");
-  document.querySelectorAll("#dash section").forEach(s => {
-    s.hidden = s.getAttribute("data-mod") !== mod;
-  });
-}
-function pickGroup(id) {
-  currentGroup = id;
-  renderCats();
-  openDash("species");
-  searchSpecies();
-}
-
 NAV.forEach(b => b.addEventListener("click", () => {
   NAV.forEach(x => x.classList.remove("active"));
   b.classList.add("active");
@@ -373,158 +280,128 @@ NAV.forEach(b => b.addEventListener("click", () => {
     });
   }
 }));
-
-async function ncbiSearch(db, term) {
-  const s = await fetch(`${EUTILS}/esearch.fcgi?db=${db}&term=${encodeURIComponent(term)}&retmax=12&retmode=json`).then(r => r.json());
+async function ncbiSearch(db, term, retmax, retstart) {
+  const s = await fetch(`${EUTILS}/esearch.fcgi?db=${db}&term=${encodeURIComponent(term)}&retmax=${retmax || 12}&retstart=${retstart || 0}&retmode=json`).then(r => r.json());
   const ids = (s.esearchresult && s.esearchresult.idlist) || [];
-  if (!ids.length) return { ids: [], result: {} };
+  const count = Number((s.esearchresult && s.esearchresult.count) || ids.length);
+  if (!ids.length) return { ids: [], result: {}, count: 0 };
   const sum = await fetch(`${EUTILS}/esummary.fcgi?db=${db}&id=${ids.join(",")}&retmode=json`).then(r => r.json());
-  return { ids, result: sum.result || {} };
+  return { ids, result: sum.result || {}, count };
 }
-
-async function searchSpecies() {
-  const err = document.getElementById("spErr");
+function abilitiesFrom(text) {
+  const hits = KEYS.filter(k => (text || "").toLowerCase().includes(k));
+  if (!hits.length) return { ability: "unavailable from this annotation", evidence: "unknown" };
+  return { ability: hits.join(", "), evidence: "predicted (keyword match on published text)" };
+}
+function pickGroup(id) {
+  currentGroup = id;
+  geneRetstart = 0;
+  document.getElementById("genePanel").innerHTML = "";
+  renderCats();
+  loadCatalog();
+}
+async function loadCatalog() {
   const out = document.getElementById("spOut");
-  err.textContent = ""; out.innerHTML = "Searching…";
-  try {
-    const q = document.getElementById("spQ").value.trim();
-    const g = GROUPS.find(x => x.id === currentGroup) || GROUPS[1];
-    const term = q
-      ? `(${q}) AND (${g.filter})`
-      : g.examples.map(n => `${n}[Scientific Name]`).join(" OR ");
-    const { ids, result } = await ncbiSearch("taxonomy", term);
-    if (!ids.length) { out.innerHTML = "No NCBI Taxonomy hits (unavailable)."; return; }
-    const cards = [];
-    for (const id of ids) {
-      const it = result[id] || {};
-      const sci = it.scientificname || it.title || "unavailable";
-      let extra = "";
+  document.getElementById("spErr").textContent = "";
+  out.innerHTML = "Loading catalog…";
+  const group = GROUPS.find(x => x.id === currentGroup);
+  const cards = [];
+  for (const name of group.examples) {
+    try {
+      const { ids, result } = await ncbiSearch("taxonomy", name + "[Scientific Name]", 1, 0);
+      const id = ids[0];
+      const it = (id && result[id]) || {};
+      const sci = it.scientificname || name;
+      let img = "", where = "location unavailable from GBIF";
       try {
         const g = await fetch("https://api.gbif.org/v1/species/match?name=" + encodeURIComponent(sci)).then(r => r.json());
         if (g.usageKey) {
-          extra += `<p><a href="https://www.gbif.org/species/${g.usageKey}" target="_blank" rel="noopener">GBIF ${g.usageKey}</a></p>`;
-          const occ = await fetch(`https://api.gbif.org/v1/occurrence/search?taxonKey=${g.usageKey}&limit=1&mediaType=StillImage`).then(r => r.json());
-          const img = occ.results && occ.results[0] && occ.results[0].media && occ.results[0].media[0] && occ.results[0].media[0].identifier;
-          if (img) extra += `<img class="hit" src="${img}" alt="">`;
-        } else extra += "<p class='muted'>GBIF match unavailable</p>";
-      } catch(e) { extra += "<p class='muted'>GBIF unavailable</p>"; }
-      cards.push(`<div class="card"><h3>${sci}</h3>
-        <p>taxid ${id} · common name: ${it.commonname || "unavailable"} · rank: ${it.rank || "unavailable"}</p>
-        <p><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${id}" target="_blank" rel="noopener">NCBI Taxonomy</a>
-        · <a href="https://www.ncbi.nlm.nih.gov/nuccore/?term=txid${id}[Organism]" target="_blank" rel="noopener">GenBank</a>
-        · <a href="https://ensembl.org" target="_blank" rel="noopener">Ensembl</a>
-        · <a href="https://www.inaturalist.org/search?q=${encodeURIComponent(sci)}" target="_blank" rel="noopener">iNaturalist</a></p>${extra}</div>`);
+          const occ = await fetch("https://api.gbif.org/v1/occurrence/search?taxonKey=" + g.usageKey + "&limit=8&mediaType=StillImage").then(r => r.json());
+          const recs = occ.results || [];
+          const withImg = recs.find(r => r.media && r.media[0] && r.media[0].identifier);
+          if (withImg) img = withImg.media[0].identifier;
+          const countries = [...new Set(recs.map(r => r.country).filter(Boolean))];
+          if (countries.length) where = countries.slice(0, 6).join(", ");
+        }
+      } catch (e) {}
+      const photo = img ? `<img src="${img}" alt="${sci}">` : `<div class="ph">specimen image unavailable</div>`;
+      cards.push(`<button type="button" class="card" onclick="openSpecies('${id || ""}','${sci.replace(/'/g, "")}')">${photo}<h3>${sci}</h3><p class="muted">${it.commonname || "common name unavailable"}</p><p><b>Where found:</b> ${where}</p><p class="muted">click for documented genes</p></button>`);
+    } catch (e) {
+      cards.push(`<div class="card"><h3>${name}</h3><p class="muted">NCBI record unavailable</p></div>`);
     }
-    out.innerHTML = cards.join("");
-  } catch (e) { err.textContent = "NCBI request failed. Try again in a moment."; out.innerHTML = ""; }
+  }
+  out.innerHTML = cards.join("");
 }
-
+async function openSpecies(taxid, sci) {
+  geneRetstart = 0;
+  await loadGenesFor(sci, taxid, false);
+}
+async function loadGenesFor(sci, taxid, append) {
+  const panel = document.getElementById("genePanel");
+  if (!append) panel.innerHTML = `<div class="card"><h2>Documented genes for ${sci}</h2><div id="geneList">Loading genes…</div></div>`;
+  const term = taxid ? `txid${taxid}[Organism]` : `${sci}[Organism]`;
+  try {
+    const { ids, result, count } = await ncbiSearch("gene", term, 15, geneRetstart);
+    const box = document.getElementById("geneList");
+    if (!ids.length && !append) { box.innerHTML = "No NCBI Gene records returned."; return; }
+    let html = "";
+    for (const id of ids) {
+      const it = result[id] || {};
+      const summary = it.summary || "function summary unavailable";
+      const ab = abilitiesFrom(summary);
+      const loc = (it.chromosome && String(it.chromosome)) || it.maplocation || "location unavailable";
+      html += `<div class="gene-row"><b>${it.name || "symbol unavailable"}</b> — ${it.description || ""}<br><span class="muted">GeneID ${id} · where: ${loc}</span><br>Ability: ${ab.ability} · ${ab.evidence}<br><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a></div>`;
+    }
+    if (append) box.innerHTML += html;
+    else box.innerHTML = `<p class="muted">NCBI reports ${count} gene records. Showing a page at a time.</p>` + html;
+    geneRetstart += ids.length;
+    if (geneRetstart < count) {
+      const more = document.createElement("button");
+      more.className = "more";
+      more.textContent = "Load more genes";
+      more.onclick = () => loadGenesFor(sci, taxid, true);
+      box.appendChild(more);
+    }
+  } catch (e) {
+    document.getElementById("geneList").innerHTML = "NCBI Gene request failed.";
+  }
+}
 async function searchGenes() {
-  const err = document.getElementById("gErr");
   const out = document.getElementById("gOut");
-  err.textContent = ""; out.innerHTML = "Searching…";
+  document.getElementById("gErr").textContent = "";
+  out.innerHTML = "Searching…";
   try {
     const gene = document.getElementById("gQ").value.trim();
     const sp = document.getElementById("gSp").value.trim();
-    const term = sp ? `${gene} AND ${sp}[Organism]` : gene;
-    const { ids, result } = await ncbiSearch("gene", term);
-    if (!ids.length) { out.innerHTML = "No NCBI Gene hits (unavailable)."; return; }
-    const cards = [];
-    for (const id of ids) {
+    const { ids, result } = await ncbiSearch("gene", sp ? gene + " AND " + sp + "[Organism]" : gene, 10, 0);
+    if (!ids.length) { out.innerHTML = "No NCBI Gene hits."; return; }
+    out.innerHTML = ids.map(id => {
       const it = result[id] || {};
-      const symbol = it.name || gene;
-      const org = (it.organism && it.organism.scientificname) || sp || "unavailable";
-      let uni = "UniProt function unavailable";
-      try {
-        const u = await fetch("https://rest.uniprot.org/uniprotkb/search?query=" + encodeURIComponent(`gene:${symbol} AND organism_name:${org}`) + "&size=1&format=json&fields=accession,protein_name,cc_function").then(r => r.json());
-        const hit = u.results && u.results[0];
-        if (hit) {
-          const acc = hit.primaryAccession;
-          const texts = [];
-          (hit.comments || []).forEach(c => (c.texts || []).forEach(t => t.value && texts.push(t.value)));
-          uni = texts[0] ? texts[0] : "function comment unavailable";
-          uni += ` (<a href="https://www.uniprot.org/uniprotkb/${acc}/entry" target="_blank" rel="noopener">${acc}</a>)`;
-        }
-      } catch(e) {}
-      const blob = ((it.summary || "") + " " + uni).toLowerCase();
-      const abilities = KEYS.filter(k => blob.includes(k));
-      const evidence = abilities.length ? "predicted (keyword match on published annotation)" : "unknown (no mapped ability keywords)";
-      cards.push(`<div class="card"><h3>${symbol} — ${it.description || ""}</h3>
-        <p>GeneID ${id} · ${org}</p>
-        <p>${it.summary || "NCBI summary unavailable"}</p>
-        <p>${uni}</p>
-        <p>Ability mapping: ${abilities.join(", ") || "none"} · ${evidence}</p>
-        <p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a>
-        · <a href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(symbol + " " + org)}" target="_blank" rel="noopener">PubMed</a>
-        · <a href="https://geneontology.org" target="_blank" rel="noopener">Gene Ontology</a>
-        · <a href="https://www.genome.jp/kegg/" target="_blank" rel="noopener">KEGG</a></p></div>`);
-    }
-    out.innerHTML = cards.join("");
-  } catch (e) { err.textContent = "NCBI Gene request failed."; out.innerHTML = ""; }
+      const ab = abilitiesFrom(it.summary);
+      return `<div class="card"><h3>${it.name || gene}</h3><p>${it.summary || "summary unavailable"}</p><p>Ability: ${ab.ability}</p><p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a></p></div>`;
+    }).join("");
+  } catch (e) { document.getElementById("gErr").textContent = "NCBI Gene request failed."; }
 }
-
-function loadList(key) { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } }
-function saveInterest() {
-  const items = loadList("interests");
-  items.unshift({
-    species: iSpecies.value, gene: iGene.value, ability: iAbility.value,
-    priority: iPri.value, category: iCat.value, notes: iNotes.value, when: new Date().toISOString()
-  });
-  localStorage.setItem("interests", JSON.stringify(items.slice(0, 100)));
-  renderInterests();
+async function bioSearch() {
+  document.getElementById("gQ").value = document.getElementById("bioQ").value;
+  document.getElementById("gSp").value = document.getElementById("bioSp").value;
+  await searchGenes();
+  document.getElementById("bioOut").innerHTML = document.getElementById("gOut").innerHTML;
 }
-function renderInterests() {
-  const items = loadList("interests");
-  iOut.innerHTML = items.map(x => `<div class="card"><b>${x.gene || "(no gene)"}</b> · ${x.species || ""} · ${x.ability || ""} · ${x.priority}<p class="muted">${x.notes || ""}</p></div>`).join("") || "<p class='muted'>No saved interests yet.</p>";
-}
-function saveNote() {
-  const items = loadList("notes");
-  items.unshift({ title: nTitle.value, body: nBody.value, when: new Date().toISOString() });
-  localStorage.setItem("notes", JSON.stringify(items.slice(0, 100)));
-  renderNotes();
-}
-function renderNotes() {
-  const items = loadList("notes");
-  nOut.innerHTML = items.map(x => `<div class="card"><b>${x.title || "Untitled"}</b><p>${x.body || ""}</p><p class="muted">${x.when}</p></div>`).join("") || "<p class='muted'>No projects yet.</p>";
+function assist() {
+  document.getElementById("aOut").textContent = "This assistant will not create new genes or engineered abilities.\n\nUse NCBI Gene, UniProt, and PubMed. Label claims CONFIRMED SCIENCE, COMPUTATIONAL PREDICTION, or SPECULATIVE HYPOTHESIS.";
 }
 function viewSeq() {
-  const raw = fa.value.trim();
-  const seq = raw.replace(/^>.*$/m, "").replace(/\s+/g, "").toUpperCase();
-  if (!seq) { faOut.textContent = "No sequence."; return; }
-  if (!/^[ACGTUNRYSWKMBDHV.-]+$/.test(seq)) { faOut.textContent = "Not valid IUPAC nucleic acid characters. Sequence not invented or corrected."; return; }
-  const gc = ((seq.split("G").length - 1 + seq.split("C").length - 1) * 100 / seq.length).toFixed(2);
-  faOut.textContent = `Length: ${seq.length}\nGC%: ${gc}\nPreview: ${seq.slice(0, 400)}\nThis is computed only on the text you pasted.`;
+  const seq = fa.value.trim().replace(/^>.*$/m, "").replace(/\s+/g, "").toUpperCase();
+  if (!seq) { faOut.textContent = "No sequence pasted."; return; }
+  if (!/^[ACGTUNRYSWKMBDHV.-]+$/.test(seq)) { faOut.textContent = "Not valid nucleic acid characters."; return; }
+  faOut.textContent = "Length: " + seq.length + "\nPreview: " + seq.slice(0, 400);
 }
 function makePlan() {
-  const text = (wSp.value + " " + wGene.value + " " + wObj.value).toLowerCase();
-  const blocked = ["crispr","cas9","guide rna","knock-in","transfection","viral vector","synthesize dna","pathogen","gain of function"];
-  if (blocked.some(b => text.includes(b))) {
-    wOut.textContent = "Institutional review required.\n\nThis request looks like laboratory/genome-editing work. This page only writes computational/educational plans. Follow your approved lab protocols. Do not use this site as a procedure.";
-    return;
-  }
-  wOut.textContent = `Computational research plan
-Project title: Computational analysis of ${wGene.value} in ${wSp.value}
-Research objective: ${wObj.value}
-Background: Use NCBI Taxonomy, NCBI Gene, Ensembl, UniProt, and PubMed. If a database returns no record, mark it unavailable.
-Scientific references:
-- https://www.ncbi.nlm.nih.gov/gene
-- https://ensembl.org
-- https://www.uniprot.org
-- https://pubmed.ncbi.nlm.nih.gov
-Required information: scientific name, taxid, GeneID/Ensembl/UniProt IDs, evidence level
-Computational workflow:
-1. Resolve taxonomy
-2. Search NCBI Gene / Ensembl
-3. Read UniProt function comments only
-4. Use BLAST/UCSC/PDB links if a public sequence exists
-5. Log accessions in the notebook
-Expected outputs: identifier table, sequence availability, literature list, explicit gaps
-Limitations: public databases are incomplete; keyword abilities are not experimental proof
-Checklist: taxid, gene IDs or missing, evidence labeled, no invented sequences, lab work routed to approved protocols`;
+  wOut.textContent = "Computational plan only. No CRISPR lab steps, extraction, PCR, gels, or freezing protocols.\n\n1. Confirm NCBI taxid\n2. Record GeneID\n3. Cite UniProt/PubMed\n4. Paste a public FASTA if one exists";
 }
 renderCats();
-renderInterests();
-renderNotes();
+loadCatalog();
 </script>
 </body>
 </html>
