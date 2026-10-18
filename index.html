@@ -48,6 +48,8 @@ pre { white-space: pre-wrap; font-size: 12px; overflow: auto; }
 .catalog .card:hover { border-color: #67e8f9; }
 .catalog .card img, .art { width: 100%; height: 170px; object-fit: cover; border-radius: 8px; background: #0b3a4a; display: block; }
 .gene-row { border-top: 1px solid #1e293b; padding: 10px 0; }
+.primer-seq { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; word-break: break-all; color: #a5f3fc; }
+#primerOut { margin: 14px 0; }
 </style>
 </head>
 <body>
@@ -160,9 +162,10 @@ pre { white-space: pre-wrap; font-size: 12px; overflow: auto; }
     </section>
     <section data-mod="bio" hidden>
       <h1>Bioinformatics</h1>
-      <p class="note">Shows published gene location and NCBI sequence when available. Does not generate PCR primer oligos. Use Primer-BLAST in an approved class.</p>
+      <p class="note">Select a species to see curated published barcoding primers from this portfolio table. Gene locus preview still comes from NCBI when available. This page does not invent new primer designs.</p>
       <div id="bioPicks" class="pick"></div>
       <p class="muted">Selected species: <b id="bioSpLabel">Homo sapiens</b></p>
+      <div id="primerOut"></div>
       <input id="bioQ" placeholder="Gene name, e.g. TP53" value="TP53">
       <button class="go" type="button" onclick="bioSearch()">Show gene locus / sequence</button>
       <p id="bioErr" class="err"></p>
@@ -182,6 +185,37 @@ pre { white-space: pre-wrap; font-size: 12px; overflow: auto; }
 const EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
 const NAV = document.querySelectorAll(".research-nav button");
 const KEYS = ["regeneration","bioluminescence","dna repair","heat","cold","radiation","longevity","immune","photosynth","pigment","metabol","opsin","repair","kinase","transcription"];
+const PRIMERS = {
+  "Drosophila melanogaster": { id: "LCO1490 / HCO2198", fwd: "GGTCAACAAATCATAAAGATATTGG", rev: "TAAACTTCAGGGTGACCAAAAAATCA", target: "COI" },
+  "Apis mellifera": { id: "LCO1490 / HCO2198", fwd: "GGTCAACAAATCATAAAGATATTGG", rev: "TAAACTTCAGGGTGACCAAAAAATCA", target: "COI" },
+  "Octopus vulgaris": { id: "LCO1490 / HCO2198", fwd: "GGTCAACAAATCATAAAGATATTGG", rev: "TAAACTTCAGGGTGACCAAAAAATCA", target: "COI" },
+  "Danio rerio": { id: "FishF1 / FishR1", fwd: "TCAACCAACCACAAAGACATTGGCAC", rev: "TAGACTTCTGGGTGGCCAAAGAATCA", target: "COI" },
+  "Arabidopsis thaliana": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Oryza sativa": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Zea mays": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Solanum lycopersicum": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Glycine max": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Triticum aestivum": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Nicotiana tabacum": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Vitis vinifera": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Hordeum vulgare": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Populus trichocarpa": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Medicago truncatula": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Physcomitrium patens": { id: "rbcL-1F / rbcL-724R", fwd: "ATGTCACCACAAACAGAAAC", rev: "TCGCATGATCCTGCAGTAGC", target: "rbcL" },
+  "Saccharomyces cerevisiae": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Neurospora crassa": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Schizosaccharomyces pombe": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Ustilago maydis": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Coprinopsis cinerea": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Aspergillus niger": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Aspergillus nidulans": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Penicillium chrysogenum": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Rhizopus stolonifer": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Mucor circinelloides": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Fusarium oxysporum": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Trichoderma reesei": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" },
+  "Botrytis cinerea": { id: "ITS1 / ITS4", fwd: "TCCGTAGGTGAACCTGCGG", rev: "TCCTCCGCTTATTGATATGC", target: "ITS" }
+};
 const GROUPS = [
   { id: "human", label: "human", examples: ["Homo sapiens"] },
   { id: "animal", label: "animal", examples: ["Mus musculus","Danio rerio","Drosophila melanogaster","Caenorhabditis elegans","Gallus gallus","Bos taurus","Canis lupus familiaris","Felis catus","Pan troglodytes","Equus caballus","Sus scrofa","Ovis aries","Xenopus tropicalis","Apis mellifera","Octopus vulgaris"] },
@@ -218,14 +252,32 @@ function renderSpeciesPicks() {
   document.getElementById("geneSpLabel").textContent = selectedSpecies;
   document.getElementById("bioSpLabel").textContent = selectedSpecies;
 }
-function chooseSpecies(name) { selectedSpecies = name; renderSpeciesPicks(); }
+function showPrimersForSelected() {
+  const box = document.getElementById("primerOut");
+  if (!box) return;
+  const p = PRIMERS[selectedSpecies];
+  if (!p) {
+    box.innerHTML = `<div class="card"><h3>Published barcoding primers</h3><p class="muted">No curated primers listed for <b>${selectedSpecies}</b> in this portfolio table.</p></div>`;
+    return;
+  }
+  box.innerHTML = `<div class="card"><h3>Published barcoding primers · ${selectedSpecies}</h3>
+    <p><b>Primer identifier:</b> ${p.id}</p>
+    <p><b>Target:</b> ${p.target}</p>
+    <p><b>Forward (5′→3′):</b><br><span class="primer-seq">${p.fwd}</span></p>
+    <p><b>Reverse (5′→3′):</b><br><span class="primer-seq">${p.rev}</span></p>
+    <p class="muted">From this portfolio’s curated published barcode primer table (not a newly designed oligo).</p></div>`;
+}
+function chooseSpecies(name) { selectedSpecies = name; renderSpeciesPicks(); showPrimersForSelected(); }
 NAV.forEach(b => b.addEventListener("click", () => {
   NAV.forEach(x => x.classList.remove("active"));
   b.classList.add("active");
   const view = b.dataset.view;
   document.getElementById("portfolio").style.display = view === "portfolio" ? "block" : "none";
   document.getElementById("dash").classList.toggle("on", view === "dash");
-  if (view === "dash") document.querySelectorAll("#dash section").forEach(s => { s.hidden = s.getAttribute("data-mod") !== b.dataset.mod; });
+  if (view === "dash") {
+    document.querySelectorAll("#dash section").forEach(s => { s.hidden = s.getAttribute("data-mod") !== b.dataset.mod; });
+    if (b.dataset.mod === "bio") showPrimersForSelected();
+  }
 }));
 async function ncbiSearch(db, term, retmax, retstart) {
   const s = await fetch(`${EUTILS}/esearch.fcgi?db=${db}&term=${encodeURIComponent(term)}&retmax=${retmax || 12}&retstart=${retstart || 0}&retmode=json`).then(r => r.json());
@@ -272,7 +324,7 @@ async function loadCatalog() {
   }
   out.innerHTML = cards.join("");
 }
-async function openSpecies(taxid, sci) { geneRetstart = 0; selectedSpecies = sci; renderSpeciesPicks(); await loadGenesFor(sci, taxid, false); }
+async function openSpecies(taxid, sci) { geneRetstart = 0; selectedSpecies = sci; renderSpeciesPicks(); showPrimersForSelected(); await loadGenesFor(sci, taxid, false); }
 async function loadGenesFor(sci, taxid, append) {
   const panel = document.getElementById("genePanel");
   if (!append) panel.innerHTML = `<div class="card"><h2>Documented genes for ${sci}</h2><div id="geneList">Loading genes…</div></div>`;
@@ -320,6 +372,7 @@ async function bioSearch() {
   const err = document.getElementById("bioErr");
   const out = document.getElementById("bioOut");
   err.textContent = "";
+  showPrimersForSelected();
   out.innerHTML = "Loading published gene locus…";
   const gene = document.getElementById("bioQ").value.trim();
   try {
@@ -341,13 +394,14 @@ async function bioSearch() {
         if (fasta && fasta[0] === ">") seqBlock = fasta + "\n(Preview of the published locus only; not a primer.)";
       } catch (e) {}
     }
-    out.innerHTML = `<div class="card"><h3>${it.name || gene} · ${selectedSpecies}</h3><p>GeneID ${id}</p><p>Genome location: ${acc || "unavailable"} ${start || ""}–${stop || ""}</p><p>${it.summary || "summary unavailable"}</p><pre>${seqBlock}</pre><p class="note">Left and right PCR primers are not generated here. Use NCBI Primer-BLAST with your instructor if primers are required.</p><p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a> · <a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">NCBI Primer-BLAST</a></p></div>`;
+    out.innerHTML = `<div class="card"><h3>${it.name || gene} · ${selectedSpecies}</h3><p>GeneID ${id}</p><p>Genome location: ${acc || "unavailable"} ${start || ""}–${stop || ""}</p><p>${it.summary || "summary unavailable"}</p><pre>${seqBlock}</pre><p class="note">Left and right PCR primers are not generated here. Use the curated barcoding primers above when listed for this species, or NCBI Primer-BLAST with your instructor if other primers are required.</p><p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a> · <a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">NCBI Primer-BLAST</a></p></div>`;
   } catch (e) { err.textContent = "NCBI request failed."; }
 }
 function assist() { document.getElementById("aOut").textContent = "This assistant will not create new genes or engineered abilities.\nUse NCBI Gene, UniProt, and PubMed."; }
 function makePlan() { wOut.textContent = "Computational plan only. No CRISPR lab steps, extraction, PCR, gels, or freezing."; }
 renderCats();
 renderSpeciesPicks();
+showPrimersForSelected();
 loadCatalog();
 </script>
 </body>
