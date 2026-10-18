@@ -1,999 +1,1256 @@
 
-<!-- BEGIN LABORATORY PROCEDURE LIBRARY -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Genome Research OS | Mark Gonzalez</title>
 <style>
-#lab-procedures {
-  display: none;
-  min-height: 100vh;
-  background: #020617;
-  color: #e2e8f0;
-  padding: 25px 18px 70px;
-  font-family: Arial, sans-serif;
+:root{
+  --bg:#020617;--panel:#0f172a;--line:#334155;
+  --cyan:#67e8f9;--teal:#5eead4;--text:#e2e8f0;
+  --muted:#94a3b8;--yellow:#fde68a;--red:#fca5a5;
 }
-#lab-procedures * { box-sizing: border-box; }
-.lab-wrap { max-width: 1050px; margin: auto; }
-.lab-heading { color: #67e8f9; }
-.lab-muted { color: #94a3b8; }
-.lab-card {
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 18px;
-  margin: 14px 0;
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+nav{position:sticky;top:0;z-index:50;background:#061428;padding:12px;display:flex;gap:9px;flex-wrap:wrap}
+nav button{background:#123044;color:var(--teal);border:1px solid #164e63;border-radius:7px;padding:9px}
+nav button.active{background:var(--cyan);color:#020617}
+main{max-width:1100px;margin:auto;padding:24px 18px 70px}
+h1,h2{color:var(--cyan)}
+h1{margin-top:0}
+h3{color:#a5f3fc}
+a{color:var(--cyan)}
+.view[hidden]{display:none!important}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px;margin:12px 0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.warn{background:#422006;border-left:4px solid #f59e0b;padding:12px;border-radius:6px;margin:12px 0}
+.danger{background:#450a0a;border-left:4px solid #ef4444;padding:12px;border-radius:6px;margin:12px 0}
+.good{color:#86efac}
+.bad{color:var(--red)}
+.planned{color:var(--yellow)}
+input,select,textarea{
+  width:100%;padding:10px;background:#020617;color:white;
+  border:1px solid #475569;border-radius:7px;margin:6px 0 12px
 }
-.lab-folder {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: #0f172a;
-  color: #e2e8f0;
-  border: 1px solid #334155;
-  border-radius: 9px;
-  margin: 7px 0;
-  padding: 13px;
-  cursor: pointer;
-  font-size: 15px;
+textarea{min-height:75px}
+button.action{background:var(--cyan);color:#020617;border:0;border-radius:7px;padding:10px 14px;margin:5px;font-weight:bold}
+button.secondary{background:#164e63;color:white;border:1px solid #22d3ee;border-radius:7px;padding:9px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.two{display:grid;grid-template-columns:270px minmax(0,1fr);gap:18px}
+.folder{width:100%;text-align:left;display:block;background:var(--panel);border:1px solid var(--line);color:white;border-radius:8px;padding:13px;margin:7px 0}
+.folder.active{border-color:var(--cyan);background:#123044}
+.step{padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.step summary{cursor:pointer;font-size:17px;font-weight:bold;color:var(--cyan)}
+.step p{line-height:1.5}
+.arrow{text-align:center;font-size:28px;color:var(--cyan);padding:8px}
+.seq{font:13px monospace;word-break:break-all;color:#a5f3fc}
+.pill{display:inline-block;background:#164e63;border-radius:20px;padding:5px 10px;font-size:12px;margin:3px}
+table{border-collapse:collapse;width:100%}
+td,th{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#020617;padding:12px;border-radius:8px}
+.picks{display:flex;gap:7px;flex-wrap:wrap;max-height:210px;overflow:auto}
+.picks button{background:#123044;color:#cffafe;border:1px solid #155e75;border-radius:6px;padding:7px}
+.picks button.selected{background:var(--cyan);color:#020617}
+.profile{display:flex;align-items:center;gap:22px}
+.profile img{width:130px;border-radius:10px}
+.portfolio{background:white;color:#111;padding:35px;border-radius:10px}
+.portfolio h1,.portfolio h2{color:#0b5fff}
+.portfolio a{color:#0b5fff}
+.logos{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.logos img{width:115px;max-height:100px;object-fit:contain}
+.photo{max-width:760px;width:100%;border-radius:8px;margin:12px 0}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
+.video-grid iframe{width:100%;height:230px;border:0}
+@media(max-width:720px){
+ .two{grid-template-columns:1fr}
+ .profile{flex-direction:column;align-items:flex-start}
+ main{padding:15px}
+ .portfolio{padding:18px}
 }
-.lab-folder:hover,
-.lab-folder.selected {
-  border-color: #67e8f9;
-  background: #123044;
-}
-.lab-input, .lab-select, .lab-textarea {
-  display: block;
-  width: 100%;
-  padding: 11px;
-  margin: 7px 0 14px;
-  border: 1px solid #475569;
-  border-radius: 7px;
-  background: #020617;
-  color: white;
-  font: inherit;
-}
-.lab-textarea { min-height: 75px; resize: vertical; }
-.lab-button {
-  background: #67e8f9;
-  color: #020617;
-  border: none;
-  border-radius: 7px;
-  padding: 10px 15px;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 5px 5px 5px 0;
-}
-.lab-step {
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 17px;
-  margin: 5px 0;
-}
-.lab-step h3 {
-  margin: 0 0 12px;
-  color: #67e8f9;
-}
-.lab-arrow {
-  text-align: center;
-  color: #67e8f9;
-  font-size: 25px;
-  padding: 6px;
-}
-.lab-warning {
-  border-left: 4px solid #f59e0b;
-  background: #422006;
-  padding: 12px;
-  border-radius: 5px;
-  margin: 12px 0;
-}
-.lab-danger {
-  border-left: 4px solid #ef4444;
-  background: #450a0a;
-  padding: 14px;
-  border-radius: 6px;
-  margin: 12px 0;
-}
-.lab-success { color: #86efac; }
-.lab-missing { color: #fca5a5; }
-.lab-planned { color: #fcd34d; }
-.lab-step label {
-  display: block;
-  margin-top: 9px;
-  font-size: 13px;
-  color: #cbd5e1;
-}
-.lab-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-  gap: 12px;
-}
-.lab-seq {
-  word-break: break-all;
-  font-family: monospace;
-  color: #a5f3fc;
-}
-@media print {
-  .research-nav, #lab-controls, #lab-folders,
-  .lab-button { display: none !important; }
-  body { background: white !important; }
-  #lab-procedures {
-    display: block !important;
-    color: black;
-    background: white;
-  }
-  .lab-card, .lab-step {
-    background: white;
-    color: black;
-    break-inside: avoid;
-  }
-  .lab-step h3, .lab-heading { color: black; }
-  .lab-arrow { color: black; }
+@media print{
+ nav,.no-print,button{display:none!important}
+ body,.card,.step{background:white!important;color:black!important}
+ h1,h2,h3,summary{color:black!important}
+ main{max-width:none}
+ .view:not([hidden]){display:block}
+ .step{break-inside:avoid}
+ input,textarea{color:black;border:1px solid #aaa}
 }
 </style>
+</head>
+<body>
 
-<section id="lab-procedures">
-  <div class="lab-wrap">
-    <h1 class="lab-heading">🧬 Laboratory Procedure Library</h1>
-    <p class="lab-muted">
-      Shared procedures organized by organism and
-      linked to your existing species and primer records.
-    </p>
+<nav id="nav">
+<button data-view="portfolio" class="active">Home</button>
+<button data-view="species">Species</button>
+<button data-view="genes">Genes</button>
+<button data-view="bio">Bioinformatics & Primers</button>
+<button data-view="procedures">📁 P1–P12 Procedures</button>
+<button data-view="inventory">Equipment</button>
+<button data-view="notebook">Research Notebook</button>
+<button data-view="assistant">Research Assistant</button>
+<button data-view="workflows">Research Workflows</button>
+</nav>
 
-    <div id="lab-controls" class="lab-card">
-      <label for="lab-species-select">Select species</label>
-      <select id="lab-species-select" class="lab-select"></select>
+<main>
 
-      <button class="lab-button" id="lab-open-species">
-        Open Species Procedure
-      </button>
-      <button class="lab-button" id="lab-print">
-        Print Procedure
-      </button>
-      <button class="lab-button" id="lab-export">
-        Export SOP Notes
-      </button>
-    </div>
-
-    <h2 class="lab-heading">Procedure Folders</h2>
-    <div id="lab-folders"></div>
-
-    <div id="lab-procedure-detail"></div>
-  </div>
+<section id="portfolio" class="view">
+<div class="portfolio">
+ <div class="logos">
+  <img src="utrgv-logo.png" alt="UTRGV">
+  <img src="ivc-logo.png" alt="Irvine Valley College">
+  <img src="usmc-logo.png" alt="USMC">
+ </div>
+ <h1>Genome Learning Portfolio</h1>
+ <p><strong>Path to Becoming a Geneticist | Genome Engineering & CRISPR-Cas9</strong></p>
+ <div class="profile">
+  <img src="profile.jpg" alt="Profile photograph">
+  <p>
+   Biology major at the University of Texas Rio Grande Valley
+   (UTRGV) and undergraduate researcher in Dr. Kathryn E.
+   Perez's laboratory. Gaining hands-on experience in specimen
+   collection, DNA extraction and purification, PCR, primer
+   design, and molecular research. Trained in BSL-1 laboratory
+   safety, micropipetting, and autoclave operation.
+   Long-term goal is to specialize in genetic engineering,
+   CRISPR-Cas9 genome editing, and applied genetic research.
+  </p>
+ </div>
+ <h2>🧬 Academic Focus</h2>
+ <ul>
+  <li>Genetics Foundations</li>
+  <li>Molecular Biology</li>
+  <li>DNA Repair Mechanisms</li>
+  <li>Genome Engineering</li>
+  <li>CRISPR-Cas9 Systems</li>
+ </ul>
+ <h2>🔬 CRISPR-Cas9 Overview</h2>
+ <p>
+  CRISPR-Cas9 uses guide RNA to direct a compatible Cas9
+  nuclease toward a DNA target. Genome-editing research
+  investigates how cells respond to DNA alterations.
+ </p>
+ <h2>🧰 CRISPR-Cas9 Tools & Instruments</h2>
+ <img class="photo" src="crisper-tools.png" alt="CRISPR tools">
+ <h2>🎥 My Videos (Episodes 1–6)</h2>
+ <div class="video-grid">
+  <iframe src="https://www.youtube.com/embed/0IcY4fyuFJE" title="Episode 1" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/2YV2Sl9JPOI" title="Episode 2" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/izsVuHdGwd4" title="Episode 3" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/T1fLOS7Vt2Y" title="Episode 4" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/XIeCxjdMB2A" title="Episode 5" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/f2OUl9YPUzo" title="Episode 6" allowfullscreen></iframe>
+ </div>
+ <h2>📺 Recommended Educational Videos</h2>
+ <p>Embedded for educational purposes. Credit to original creators.</p>
+ <div class="video-grid">
+  <iframe src="https://www.youtube.com/embed/6tw_JVz_IEc" title="CRISPR Explained" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/jAhjPd4uNFY?start=229" title="Gene Editing Overview" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/4YKFw2KZA5o" title="Genome Editing Deep Dive" allowfullscreen></iframe>
+ </div>
+ <h2>🧪 Research Engagement & Networking</h2>
+ <p>Attended Oak Ridge National Laboratory research presentation at UTRGV.</p>
+ <h3>With Dr. Megan E. Keniry</h3>
+ <img class="photo" src="ornl-megan-keniry-2026.jpeg" alt="Dr. Megan E. Keniry event">
+ <p>Discussed pathways toward undergraduate molecular genetics and genome-editing research.</p>
+ <h3>With Dr. Ahmed Arabi Hassen</h3>
+ <img class="photo" src="ornl-ahmed-hassen-2026.jpeg" alt="Dr. Ahmed Arabi Hassen event">
+ <p>Discussed national laboratory research environments and biotechnology applications.</p>
+ <h3>ORNL Research Event Group Photo</h3>
+ <img class="photo" src="ornl-group-photo-2026.jpeg" alt="ORNL group photo">
+ <h2>📚 Professional Research Resources</h2>
+ <ul>
+  <li><a href="https://ebookcentral.proquest.com/lib/utrgv-ebooks/detail.action?docID=30781939">Genetics: From Genes to Genomes</a></li>
+  <li><a href="https://pubmed.ncbi.nlm.nih.gov/">PubMed</a></li>
+  <li><a href="https://www.ncbi.nlm.nih.gov/">NCBI</a></li>
+  <li><a href="https://www.addgene.org/crispr/">Addgene CRISPR Center</a></li>
+  <li><a href="https://benchling.com/">Benchling</a></li>
+  <li><a href="https://www.biorxiv.org/">bioRxiv</a></li>
+ </ul>
+ <h2>🎓 Student Resources</h2>
+ <ul>
+  <li><a href="https://flowcv.com/">FlowCV</a></li>
+  <li><a href="https://www.purposegames.com/tag/bones">PurposeGames</a></li>
+  <li><a href="https://www.change.org/">Change.org</a></li>
+ </ul>
+ <h2>💙 Donate to Genetics Research</h2>
+ <ul>
+  <li><a href="https://www.genome.gov/">NHGRI</a></li>
+  <li><a href="https://www.stjude.org/">St. Jude</a></li>
+  <li><a href="https://www.broadinstitute.org/">Broad Institute</a></li>
+  <li><a href="https://www.crisprtx.com/">CRISPR Therapeutics</a></li>
+ </ul>
+ <h2>📬 Contact</h2>
+ <p>Email: <a href="mailto:mark250gonzalez@gmail.com">mark250gonzalez@gmail.com</a></p>
+ <p>LinkedIn: <a href="https://www.linkedin.com/in/mark-gonzalez-858167266">Professional Profile</a></p>
+</div>
 </section>
 
+<section id="species" class="view" hidden>
+<h1>Species Catalog</h1>
+<p class="muted">Select a group and species. All records connect to your laboratory procedure library.</p>
+<div class="picks" id="groupButtons"></div>
+<input id="speciesSearch" placeholder="Search any species...">
+<div class="grid" id="speciesCards"></div>
+<div id="speciesDetails"></div>
+</section>
+
+<section id="genes" class="view" hidden>
+<h1>Gene Explorer</h1>
+<div class="card">
+<label>Species</label>
+<select id="geneSpecies"></select>
+<label>Gene symbol or name</label>
+<input id="geneQuery" value="TP53">
+<button class="action" id="geneSearchButton">Search NCBI Gene</button>
+</div>
+<div id="geneResults"></div>
+</section>
+
+<section id="bio" class="view" hidden>
+<h1>Bioinformatics & Primer Library</h1>
+<div class="card">
+<label>Select species</label>
+<select id="bioSpecies"></select>
+<div id="primerResults"></div>
+</div>
+<div class="card">
+<h3>NCBI Gene Reference</h3>
+<input id="bioGene" placeholder="Gene symbol, e.g. TP53" value="TP53">
+<button class="action" id="bioButton">Search gene location</button>
+<div id="bioResults"></div>
+</div>
+<div class="card">
+<h3>Sequence Tools</h3>
+<p class="muted">Paste a FASTA sequence to calculate length, GC%, and reverse complement.</p>
+<textarea id="fastaInput" placeholder=">sample&#10;ATGCGT..."></textarea>
+<button class="action" id="fastaButton">Analyze Sequence</button>
+<div id="fastaResults"></div>
+</div>
+</section>
+
+<section id="procedures" class="view" hidden>
+<h1>📁 Laboratory Procedure Library</h1>
+<p class="muted">
+One reusable P-number folder per procedure family.
+Select a species to load its assigned procedure and primer record.
+Exact numerical SOP settings can be entered and saved for reuse.
+</p>
+<div class="two">
+<aside>
+<div class="card">
+<label>Select species</label>
+<input id="procedureSearch" placeholder="Filter species...">
+<select id="procedureSpecies"></select>
+<button class="action" id="autoProcedure">Open Species Procedure</button>
+</div>
+<h3>Procedure Folders</h3>
+<div id="procedureFolders"></div>
+</aside>
+<div>
+<div id="procedureHeader"></div>
+<div class="card no-print">
+<button class="action" id="expandAll">Expand all</button>
+<button class="action" id="collapseAll">Collapse all</button>
+<button class="action" id="printProcedure">Print</button>
+<button class="action" id="exportSOP">Export SOP JSON</button>
+<label>Import saved SOP JSON</label>
+<input type="file" id="importSOP" accept=".json">
+</div>
+<div id="procedureBody"></div>
+</div>
+</div>
+</section>
+
+<section id="inventory" class="view" hidden>
+<h1>Laboratory Equipment Inventory</h1>
+<p class="muted">Change equipment ownership status as your laboratory develops.</p>
+<div id="inventoryList"></div>
+</section>
+
+<section id="notebook" class="view" hidden>
+<h1>Paper Laboratory Notebook Index</h1>
+<div class="card">
+<p>Link physical notebook pages with your specimen and experiment records.</p>
+<label>Experiment ID</label><input id="nbExperiment">
+<label>Species</label><select id="nbSpecies"></select>
+<label>Notebook number</label><input id="nbBook">
+<label>Page numbers</label><input id="nbPages">
+<label>Research summary</label><textarea id="nbNotes"></textarea>
+<button class="action" id="nbSave">Save reference</button>
+<button class="action" id="nbExport">Export notebook index</button>
+</div>
+<div id="nbList"></div>
+</section>
+
+<section id="assistant" class="view" hidden>
+<h1>Research Assistant</h1>
+<div class="card">
+<p>
+This static website does not have a connected AI model.
+Use verified sources to review published genetic research.
+</p>
+<input id="assistantQuery" placeholder="Species or gene to research">
+<button class="action" id="assistantButton">Open research sources</button>
+<div id="assistantResults"></div>
+</div>
+</section>
+
+<section id="workflows" class="view" hidden>
+<h1>Computational Research Workflows</h1>
+<div class="card">
+<label>Species</label><select id="workflowSpecies"></select>
+<label>Gene of interest</label><input id="workflowGene" value="TP53">
+<button class="action" id="workflowButton">Create research plan</button>
+<div id="workflowResult"></div>
+</div>
+</section>
+
+</main>
+
 <script>
-(() => {
-  "use strict";
-
-  /*
-   * This module uses GROUPS and PRIMERS from
-   * the existing Genome Learning Portfolio.
-   *
-   * It does not invent laboratory measurements.
-   * Exact values can be recorded from a reviewed SOP.
-   */
-
-  const FOLDERS = {
-    P1: {
-      name: "Plant DNA Research",
-      description: "Leaves, plant tissue, and plant barcoding",
-      groups: ["plant"],
-      equipment: [
-        "Specimen containers",
-        "Microscope",
-        "Pipettes",
-        "Tubes and racks",
-        "Plant-compatible extraction reagents",
-        "Centrifuge",
-        "Thermal cycler",
-        "Gel electrophoresis system",
-        "Sequencing access"
-      ]
-    },
-    P2: {
-      name: "Invertebrate DNA Research",
-      description: "Insects, nematodes, and mollusks",
-      groups: ["animal"],
-      equipment: [
-        "Specimen containers",
-        "Microscope",
-        "Pipettes",
-        "Tubes and racks",
-        "Tissue extraction reagents",
-        "Centrifuge",
-        "Thermal cycler",
-        "Gel electrophoresis system",
-        "Sequencing access"
-      ]
-    },
-    P3: {
-      name: "Vertebrate DNA Research",
-      description: "Fish, mammals, birds, and amphibians",
-      groups: ["human","animal"],
-      equipment: [
-        "Authorized specimen material",
-        "Specimen containers",
-        "Microscope",
-        "Pipettes",
-        "Tubes and racks",
-        "Tissue extraction reagents",
-        "Centrifuge",
-        "Thermal cycler",
-        "Gel electrophoresis system",
-        "Sequencing access"
-      ]
-    },
-    P4: {
-      name: "Bacterial DNA Research",
-      description: "Verified low-risk laboratory strains only",
-      groups: ["bacteria"],
-      equipment: [
-        "Approved source material",
-        "Appropriate containment",
-        "Pipettes",
-        "Tubes",
-        "Validated extraction supplies",
-        "Thermal cycler",
-        "Gel electrophoresis system"
-      ]
-    },
-    P5: {
-      name: "Yeast DNA Research",
-      description: "Verified low-risk yeast strains",
-      groups: ["fungi"],
-      equipment: [
-        "Approved yeast strain",
-        "Pipettes",
-        "Tubes",
-        "Yeast-compatible extraction supplies",
-        "Centrifuge",
-        "Thermal cycler",
-        "Gel electrophoresis system"
-      ]
-    },
-    P6: {
-      name: "Fungi and Mushroom DNA Research",
-      description: "Mushrooms and filamentous fungi",
-      groups: ["fungi","mold"],
-      equipment: [
-        "Verified specimen",
-        "Microscope",
-        "Pipettes",
-        "Tubes",
-        "Fungal DNA extraction supplies",
-        "Centrifuge",
-        "Thermal cycler",
-        "Gel electrophoresis system",
-        "Sequencing access"
-      ]
-    },
-    P7: {
-      name: "Amoeba and Protist Research",
-      description: "Specimen-specific research",
-      groups: ["amoeba"],
-      equipment: [
-        "Authorized reference material",
-        "Microscope",
-        "Computer",
-        "Reference genome database"
-      ]
-    },
-    P8: {
-      name: "Archaeal Research",
-      description: "Archaeal genomes and reference sequences",
-      groups: ["archaea"],
-      equipment: [
-        "Computer",
-        "Reference genome database",
-        "Sequence analysis software"
-      ]
-    },
-    P9: {
-      name: "Virus Reference Research",
-      description: "Computational sequence research",
-      groups: ["virus"],
-      equipment: [
-        "Computer",
-        "Public reference sequences",
-        "Sequence analysis software"
-      ]
-    },
-    P10: {
-      name: "Parasite Reference Research",
-      description: "Computational sequence research",
-      groups: ["parasite"],
-      equipment: [
-        "Computer",
-        "Reference genome database",
-        "Published literature"
-      ]
-    },
-    P11: {
-      name: "Restricted Organism Research",
-      description: "Literature and computational analysis only",
-      groups: [],
-      equipment: [
-        "Computer",
-        "Public reference sequences",
-        "Scientific publications"
-      ]
-    },
-    P12: {
-      name: "CRISPR-Cas9 Research",
-      description: "Educational and computational research",
-      groups: [],
-      equipment: [
-        "Computer",
-        "Reference sequence database",
-        "CRISPR literature and analysis tools"
-      ]
-    }
-  };
-
-  const HIGH_RISK = new Set([
-    "Mycobacterium tuberculosis",
-    "Staphylococcus aureus",
-    "Streptococcus pneumoniae",
-    "Salmonella enterica",
-    "Pseudomonas aeruginosa",
-    "Vibrio cholerae",
-    "Influenza A virus",
-    "Severe acute respiratory syndrome coronavirus 2",
-    "Human immunodeficiency virus 1",
-    "Measles morbillivirus",
-    "Hepatitis B virus",
-    "Dengue virus",
-    "Candida albicans",
-    "Cryptococcus neoformans",
-    "Aspergillus fumigatus",
-    "Plasmodium falciparum",
-    "Trypanosoma brucei",
-    "Schistosoma mansoni",
-    "Giardia intestinalis",
-    "Toxoplasma gondii",
-    "Leishmania major",
-    "Brugia malayi",
-    "Trichinella spiralis",
-    "Entamoeba histolytica",
-    "Acanthamoeba castellanii"
-  ]);
-
-  // These are illustrative inventory statuses.
-  // Edit them when exact models and ownership are confirmed.
-  const INVENTORY = {
-    "Specimen containers": "owned",
-    "Microscope": "owned",
-    "Pipettes": "owned",
-    "Tubes and racks": "owned",
-    "Tubes": "owned",
-    "Computer": "owned",
-    "Centrifuge": "verify",
-    "Thermal cycler": "verify",
-    "Gel electrophoresis system": "verify",
-    "Sequencing access": "planned",
-    "Plant-compatible extraction reagents": "verify",
-    "Tissue extraction reagents": "verify",
-    "Fungal DNA extraction supplies": "verify",
-    "Yeast-compatible extraction supplies": "verify",
-    "Validated extraction supplies": "verify",
-    "Appropriate containment": "verify",
-    "Approved source material": "verify",
-    "Approved yeast strain": "verify",
-    "Authorized specimen material": "verify",
-    "Verified specimen": "verify"
-  };
-
-  const VERTEBRATES = new Set([
-    "Homo sapiens",
-    "Mus musculus",
-    "Danio rerio",
-    "Gallus gallus",
-    "Bos taurus",
-    "Canis lupus familiaris",
-    "Felis catus",
-    "Pan troglodytes",
-    "Equus caballus",
-    "Sus scrofa",
-    "Ovis aries",
-    "Xenopus tropicalis"
-  ]);
-
-  const YEASTS = new Set([
-    "Saccharomyces cerevisiae",
-    "Schizosaccharomyces pombe"
-  ]);
-
-  const SECTIONS = [
-    {
-      name: "Specimen Collection and Labeling",
-      action:
-        "Verify specimen identity and source. Assign a unique specimen ID, label the container, and record collection information.",
-      fields: [
-        ["Specimen amount", "mg, g, or other validated unit"],
-        ["Sample type", "Tissue or specimen description"],
-        ["Source reference", "Collection or authorization record"]
-      ]
-    },
-    {
-      name: "Voucher Photography",
-      action:
-        "Photograph the relevant specimen features with the microscope. Save photographs under the specimen ID.",
-      fields: [
-        ["Image filenames", "Voucher image records"],
-        ["Microscope model", "Instrument identification"]
-      ]
-    },
-    {
-      name: "DNA Extraction",
-      action:
-        "Use the approved extraction method for this specimen type. Record the exact reagent additions and physical actions from that SOP.",
-      fields: [
-        ["Extraction protocol", "Title and version"],
-        ["Sample quantity", "mg or µL"],
-        ["Lysis buffer", "Name, concentration, µL"],
-        ["Enzyme", "Name, concentration, µL"],
-        ["Incubation", "°C and minutes"],
-        ["Mixing", "Method and duration"],
-        ["Centrifugation", "×g, minutes, °C"]
-      ]
-    },
-    {
-      name: "DNA Purification",
-      action:
-        "Follow the reviewed purification method and document the relevant wash, recovery, and elution operations.",
-      fields: [
-        ["Purification method", "Column, beads, or validated method"],
-        ["Wash reagents", "Names, concentrations, volumes"],
-        ["Wash sequence", "Validated number and order"],
-        ["Centrifugation", "×g, minutes"],
-        ["Elution buffer", "Name and µL"],
-        ["Recovered DNA", "µL and concentration"]
-      ]
-    },
-    {
-      name: "DNA Quality Check",
-      action:
-        "Assess DNA quality using the method specified by the selected SOP. Document the measurement and control results.",
-      fields: [
-        ["Quality method", "Gel, fluorometer, etc."],
-        ["DNA concentration", "ng/µL"],
-        ["A260/A280", "Value if measured"],
-        ["Gel agarose", "% and g if applicable"],
-        ["Running buffer", "Type and mL"],
-        ["DNA ladder", "Name and fragment range"],
-        ["Sample loading", "µL"],
-        ["Run settings", "V and minutes"],
-        ["Observed result", "Quality observations"]
-      ]
-    },
-    {
-      name: "PCR Reaction Preparation",
-      action:
-        "Record the selected PCR assay, primer identifiers, reagent quantities, controls, and full reaction mixture from a validated method.",
-      fields: [
-        ["PCR protocol", "Source and version"],
-        ["DNA template", "ng/µL and µL"],
-        ["Master mix", "Product and µL"],
-        ["Forward primer", "Stock concentration and µL"],
-        ["Reverse primer", "Stock concentration and µL"],
-        ["Water", "µL"],
-        ["Total volume", "µL"],
-        ["Controls", "Positive and negative controls"]
-      ]
-    },
-    {
-      name: "PCR Thermal Cycling",
-      action:
-        "Document the approved thermal cycler program associated with the exact reaction chemistry and target.",
-      fields: [
-        ["Thermal cycler", "Manufacturer and model"],
-        ["Initial denaturation", "°C and seconds"],
-        ["Denaturation", "°C and seconds"],
-        ["Annealing", "°C and seconds"],
-        ["Extension", "°C and seconds"],
-        ["Cycle count", "Number"],
-        ["Final extension", "°C and minutes"]
-      ]
-    },
-    {
-      name: "PCR Gel Electrophoresis",
-      action:
-        "Record the approved gel preparation, sample loading, electrophoresis settings, controls, and gel image.",
-      fields: [
-        ["Expected product", "bp"],
-        ["Agarose concentration", "%"],
-        ["Agarose mass", "g"],
-        ["Running buffer", "Type and mL"],
-        ["DNA stain", "Product"],
-        ["DNA ladder", "Name and µL"],
-        ["PCR sample", "µL"],
-        ["Loading dye", "µL"],
-        ["Voltage", "V"],
-        ["Run duration", "Minutes"],
-        ["Image filename", "Gel image"]
-      ]
-    },
-    {
-      name: "Results and Quality Control",
-      action:
-        "Compare observed results with the reviewed protocol's acceptance criteria. Check controls before interpreting a specimen result.",
-      fields: [
-        ["Expected band", "bp"],
-        ["Observed band", "bp"],
-        ["Positive control", "Result"],
-        ["Negative control", "Result"],
-        ["Interpretation", "Pass, fail, or inconclusive"],
-        ["Next action", "Continue, review, or repeat"]
-      ]
-    },
-    {
-      name: "DNA Sequencing",
-      action:
-        "Use an appropriate sequencing service or compatible instrument. Record the sequence files, quality information, and reference comparisons.",
-      fields: [
-        ["Sequencing method", "Sanger, nanopore, etc."],
-        ["Instrument or service", "Name"],
-        ["Input requirement", "Verified quantity and purity"],
-        ["Library preparation", "Method or kit"],
-        ["Output files", "FASTA, FASTQ, BAM, etc."],
-        ["Reference accession", "Accession and version"],
-        ["Sequence result", "Identification or alignment notes"]
-      ]
-    },
-    {
-      name: "Storage, Repeat, or Disposal",
-      action:
-        "Determine the appropriate action using the validated material-specific storage, retention, contamination, and disposal requirements.",
-      fields: [
-        ["Decision", "Store, repeat, review, dispose"],
-        ["Storage temperature", "°C"],
-        ["Storage container", "Container and label"],
-        ["Storage location", "Inventory reference"],
-        ["Disposal SOP", "Document reference"],
-        ["Repeat reason", "If applicable"]
-      ]
-    },
-    {
-      name: "Research Notebook Documentation",
-      action:
-        "Document experiment results and link the original handwritten notebook pages to the specimen record.",
-      fields: [
-        ["Experiment ID", "Unique ID"],
-        ["Notebook", "Notebook identifier"],
-        ["Page numbers", "Page range"],
-        ["Protocol source", "Citation and version"],
-        ["Reviewer", "Name or role"],
-        ["Review status", "Pending, reviewed, approved"]
-      ]
-    }
-  ];
-
-  const REF_STEPS = [
-    "Open an authoritative public reference genome or sequence record.",
-    "Record the scientific name, accession number, and database source.",
-    "Review published gene annotations and relevant research.",
-    "Compare public sequences using appropriate computational tools.",
-    "Document findings and limitations in the paper notebook."
-  ];
-
-  let activeSpecies = "Danio rerio";
-  let activeFolder = "P3";
-
-  function allRecords() {
-    if (typeof GROUPS === "undefined") return [];
-    return GROUPS.flatMap(group =>
-      group.examples.map(name => ({
-        name,
-        group: group.id
-      }))
-    );
-  }
-
-  function speciesGroup(name) {
-    const match = allRecords().find(r => r.name === name);
-    return match ? match.group : null;
-  }
-
-  function folderFor(name) {
-    const group = speciesGroup(name);
-
-    if (HIGH_RISK.has(name)) return "P11";
-    if (group === "virus") return "P9";
-    if (group === "parasite") return "P10";
-    if (group === "archaea") return "P8";
-    if (group === "amoeba") return "P7";
-    if (group === "plant") return "P1";
-    if (YEASTS.has(name)) return "P5";
-    if (group === "fungi" || group === "mold") return "P6";
-    if (group === "bacteria") return "P4";
-    if (VERTEBRATES.has(name)) return "P3";
-    if (group === "animal") return "P2";
-
-    return "P11";
-  }
-
-  function researchOnly(name, folderId) {
-    return (
-      HIGH_RISK.has(name) ||
-      ["P7","P8","P9","P10","P11","P12"].includes(folderId)
-    );
-  }
-
-  function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, ch => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    }[ch]));
-  }
-
-  function noteKey(species, index, label) {
-    return "lab-sop:" + species + ":" + index + ":" + label;
-  }
-
-  function readNote(key) {
-    try { return localStorage.getItem(key) || ""; }
-    catch { return ""; }
-  }
-
-  function saveNote(key, value) {
-    try { localStorage.setItem(key, value); }
-    catch { alert("Browser storage is unavailable."); }
-  }
-
-  function equipmentStatus(name) {
-    const status = INVENTORY[name] || "verify";
-    if (status === "owned") {
-      return '<span class="lab-success">✔ Owned</span>';
-    }
-    if (status === "planned") {
-      return '<span class="lab-planned">◷ Planned</span>';
-    }
-    return '<span class="lab-missing">? Verify</span>';
-  }
-
-  function renderFolders() {
-    const box = document.getElementById("lab-folders");
-
-    box.innerHTML = Object.entries(FOLDERS).map(([id, f]) => `
-      <button type="button"
-        class="lab-folder ${id === activeFolder ? "selected" : ""}"
-        data-lab-folder="${id}">
-        📁 <strong>${id} — ${escapeHTML(f.name)}</strong>
-        <br>
-        <small class="lab-muted">${escapeHTML(f.description)}</small>
-      </button>
-    `).join("");
-
-    box.querySelectorAll("[data-lab-folder]").forEach(button => {
-      button.addEventListener("click", () => {
-        activeFolder = button.dataset.labFolder;
-
-        const compatible = allRecords().filter(
-          r => folderFor(r.name) === activeFolder
-        );
-
-        if (compatible.length) {
-          activeSpecies = compatible[0].name;
-          document.getElementById("lab-species-select").value =
-            activeSpecies;
-        }
-
-        renderFolders();
-        renderProcedure();
-      });
-    });
-  }
-
-  function renderPrimer(species) {
-    if (typeof PRIMERS === "undefined" || !PRIMERS[species]) {
-      return `
-        <p class="lab-warning">
-          No primer pair is stored for this species.
-          Verify a published assay before ordering.
-        </p>
-      `;
-    }
-
-    const p = PRIMERS[species];
-
-    return `
-      <p><b>Primer identifier:</b> ${escapeHTML(p.id)}</p>
-      <p><b>Target:</b> ${escapeHTML(p.target)}</p>
-      <p><b>Forward (5′→3′):</b><br>
-        <span class="lab-seq">${escapeHTML(p.fwd)}</span></p>
-      <p><b>Reverse (5′→3′):</b><br>
-        <span class="lab-seq">${escapeHTML(p.rev)}</span></p>
-      <p class="lab-muted">
-        Published broad-range candidate.
-        Species-level compatibility and assay conditions
-        require verification.
-      </p>
-    `;
-  }
-
-  function renderEquipment(folder) {
-    return `
-      <div class="lab-card">
-        <h3>🧰 Required Equipment</h3>
-        <div class="lab-grid">
-          ${folder.equipment.map(name => `
-            <div>
-              ${escapeHTML(name)}:
-              ${equipmentStatus(name)}
-            </div>
-          `).join("")}
-        </div>
-        <p class="lab-muted">
-          These statuses are an initial inventory, not a
-          certification of equipment compatibility.
-        </p>
-      </div>
-    `;
-  }
-
-  function renderStep(section, index, species) {
-    return `
-      <div class="lab-step">
-        <h3>Step ${index + 1}: ${escapeHTML(section.name)}</h3>
-
-        <p>${escapeHTML(section.action)}</p>
-
-        <details>
-          <summary>Open detailed measurements and SOP notes</summary>
-
-          <p class="lab-warning">
-            Enter values only from an applicable
-            validated or reviewed procedure.
-            Empty fields are not approved settings.
-          </p>
-
-          ${section.fields.map(([label, placeholder]) => {
-            const key = noteKey(species, index, label);
-            return `
-              <label>${escapeHTML(label)}</label>
-              <input
-                class="lab-input lab-sop-field"
-                data-note-key="${escapeHTML(key)}"
-                value="${escapeHTML(readNote(key))}"
-                placeholder="${escapeHTML(placeholder)}"
-              >
-            `;
-          }).join("")}
-
-          <label>Exact physical instructions from reviewed SOP</label>
-          <textarea
-            class="lab-textarea lab-sop-field"
-            data-note-key="${escapeHTML(
-              noteKey(species,index,"instructions")
-            )}"
-            placeholder="Enter the verified step-by-step actions and protocol citation."
-          >${escapeHTML(readNote(
-            noteKey(species,index,"instructions")
-          ))}</textarea>
-        </details>
-      </div>
-    `;
-  }
-
-  function renderResearchOnly(species, folderId) {
-    return `
-      <div class="lab-danger">
-        <strong>Research-only procedure</strong>
-        <p>
-          Do not assume this organism can be collected, cultured,
-          amplified, or processed in an ordinary home laboratory.
-          This page provides public-reference research steps only.
-        </p>
-      </div>
-
-      ${REF_STEPS.map((step,index) => `
-        ${index ? '<div class="lab-arrow">↓</div>' : ""}
-        <div class="lab-step">
-          <h3>Step ${index + 1}</h3>
-          <p>${escapeHTML(step)}</p>
-        </div>
-      `).join("")}
-    `;
-  }
-
-  function renderProcedure() {
-    const folder = FOLDERS[activeFolder];
-    const box = document.getElementById("lab-procedure-detail");
-
-    if (!folder) return;
-
-    const applicable = folderFor(activeSpecies) === activeFolder;
-    const restricted = researchOnly(activeSpecies, activeFolder);
-
-    const speciesList = allRecords()
-      .filter(r => folderFor(r.name) === activeFolder)
-      .map(r => r.name);
-
-    const header = `
-      <div class="lab-card">
-        <h2 class="lab-heading">
-          📂 ${activeFolder} — ${escapeHTML(folder.name)}
-        </h2>
-
-        <p><strong>Selected species:</strong>
-          <i>${escapeHTML(activeSpecies)}</i>
-        </p>
-
-        <p><strong>Procedure match:</strong>
-          ${applicable ? "Assigned category" :
-            "Folder opened manually; species compatibility not verified"}
-        </p>
-
-        <p class="lab-muted">
-          Species associated with this folder:
-          ${speciesList.length ?
-            escapeHTML(speciesList.join(", ")) :
-            "Review-only folder"}
-        </p>
-      </div>
-    `;
-
-    if (restricted) {
-      box.innerHTML = header +
-        renderEquipment(folder) +
-        renderResearchOnly(activeSpecies,activeFolder);
-      return;
-    }
-
-    const content = SECTIONS.map((section,index) =>
-      renderStep(section,index,activeSpecies) +
-      (index < SECTIONS.length - 1 ?
-        '<div class="lab-arrow">↓</div>' : "")
-    ).join("");
-
-    box.innerHTML = `
-      ${header}
-
-      <div class="lab-warning">
-        The procedure family is a research organizer.
-        It is not a validated species-specific SOP.
-        A qualified review is required before laboratory use.
-      </div>
-
-      ${renderEquipment(folder)}
-
-      <div class="lab-card">
-        <h3>🧬 Associated Primer Record</h3>
-        ${renderPrimer(activeSpecies)}
-      </div>
-
-      <div class="lab-card">
-        <h3>📋 Numbered Laboratory Procedure</h3>
-        <p class="lab-muted">
-          Expand each action to enter verified numerical values,
-          physical instructions, and SOP references.
-        </p>
-      </div>
-
-      ${content}
-
-      <div class="lab-card">
-        <h3>Result Decision</h3>
-        <p><strong>PASS →</strong> Document controls and
-          continue only if acceptance criteria are satisfied.</p>
-        <p><strong>FAIL →</strong> Investigate the cause
-          before considering a repeat.</p>
-        <p><strong>STORE →</strong> Use verified storage conditions.</p>
-        <p><strong>DISPOSE →</strong> Follow the applicable
-          material-specific disposal procedure.</p>
-      </div>
-    `;
-
-    box.querySelectorAll(".lab-sop-field").forEach(input => {
-      input.addEventListener("change", () => {
-        saveNote(input.dataset.noteKey, input.value);
-      });
-    });
-  }
-
-  function openLab() {
-    document.getElementById("portfolio").style.display = "none";
-    document.getElementById("dash").classList.remove("on");
-    document.getElementById("lab-procedures").style.display = "block";
-
-    document.querySelectorAll(".research-nav button")
-      .forEach(button => button.classList.remove("active"));
-
-    document.getElementById("lab-nav-button")
-      .classList.add("active");
-
-    renderFolders();
-    renderProcedure();
-    window.scrollTo(0,0);
-  }
-
-  function exportNotes() {
-    const records = {};
-    try {
-      for (let i=0;i<localStorage.length;i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("lab-sop:")) {
-          records[key] = localStorage.getItem(key);
-        }
-      }
-    } catch {
-      alert("Unable to access browser storage.");
-      return;
-    }
-
-    const blob = new Blob(
-      [JSON.stringify(records,null,2)],
-      {type:"application/json"}
-    );
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "laboratory-sop-notes.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function initLab() {
-    const nav = document.querySelector(".research-nav");
-
-    const button = document.createElement("button");
-    button.id = "lab-nav-button";
-    button.type = "button";
-    button.textContent = "🧪 Lab Procedures";
-    nav.appendChild(button);
-
-    button.addEventListener("click", openLab);
-
-    // Hide laboratory panel when existing navigation is used.
-    nav.querySelectorAll("button:not(#lab-nav-button)")
-      .forEach(existing => {
-        existing.addEventListener("click", () => {
-          document.getElementById("lab-procedures")
-            .style.display = "none";
-        });
-      });
-
-    const select = document.getElementById("lab-species-select");
-    allRecords().forEach(record => {
-      const option = document.createElement("option");
-      option.value = record.name;
-      option.textContent = record.name;
-      select.appendChild(option);
-    });
-
-    select.value = activeSpecies;
-
-    select.addEventListener("change", () => {
-      activeSpecies = select.value;
-      activeFolder = folderFor(activeSpecies);
-      renderFolders();
-      renderProcedure();
-    });
-
-    document.getElementById("lab-open-species")
-      .addEventListener("click", () => {
-        activeSpecies = select.value;
-        activeFolder = folderFor(activeSpecies);
-        renderFolders();
-        renderProcedure();
-      });
-
-    document.getElementById("lab-print")
-      .addEventListener("click", () => window.print());
-
-    document.getElementById("lab-export")
-      .addEventListener("click", exportNotes);
-
-    renderFolders();
-    renderProcedure();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded",initLab);
-  } else {
-    initLab();
-  }
-})();
+"use strict";
+
+/* ---------- ORIGINAL SPECIES CATALOG ---------- */
+
+const GROUPS=[
+{id:"human",label:"Human",examples:["Homo sapiens"]},
+{id:"animal",label:"Animals",examples:[
+"Mus musculus","Danio rerio","Drosophila melanogaster",
+"Caenorhabditis elegans","Gallus gallus","Bos taurus",
+"Canis lupus familiaris","Felis catus","Pan troglodytes",
+"Equus caballus","Sus scrofa","Ovis aries",
+"Xenopus tropicalis","Apis mellifera","Octopus vulgaris"]},
+{id:"plant",label:"Plants",examples:[
+"Arabidopsis thaliana","Oryza sativa","Zea mays",
+"Solanum lycopersicum","Glycine max","Triticum aestivum",
+"Nicotiana tabacum","Vitis vinifera","Hordeum vulgare",
+"Populus trichocarpa","Medicago truncatula",
+"Physcomitrium patens"]},
+{id:"bacteria",label:"Bacteria",examples:[
+"Escherichia coli","Bacillus subtilis","Staphylococcus aureus",
+"Pseudomonas aeruginosa","Mycobacterium tuberculosis",
+"Salmonella enterica","Streptococcus pneumoniae",
+"Helicobacter pylori","Vibrio cholerae",
+"Streptomyces coelicolor","Caulobacter crescentus"]},
+{id:"virus",label:"Viruses",examples:[
+"Influenza A virus",
+"Severe acute respiratory syndrome coronavirus 2",
+"Human immunodeficiency virus 1","Tobacco mosaic virus",
+"Measles morbillivirus","Hepatitis B virus",
+"Dengue virus","Escherichia virus T4"]},
+{id:"fungi",label:"Fungi",examples:[
+"Saccharomyces cerevisiae","Neurospora crassa",
+"Schizosaccharomyces pombe","Candida albicans",
+"Cryptococcus neoformans","Aspergillus fumigatus",
+"Ustilago maydis","Coprinopsis cinerea"]},
+{id:"mold",label:"Molds",examples:[
+"Aspergillus niger","Aspergillus nidulans",
+"Penicillium chrysogenum","Rhizopus stolonifer",
+"Mucor circinelloides","Fusarium oxysporum",
+"Trichoderma reesei","Botrytis cinerea"]},
+{id:"parasite",label:"Parasites",examples:[
+"Plasmodium falciparum","Trypanosoma brucei",
+"Schistosoma mansoni","Giardia intestinalis",
+"Toxoplasma gondii","Leishmania major",
+"Brugia malayi","Trichinella spiralis"]},
+{id:"amoeba",label:"Amoebas",examples:[
+"Entamoeba histolytica","Dictyostelium discoideum",
+"Amoeba proteus","Acanthamoeba castellanii",
+"Dictyostelium purpureum","Polysphondylium pallidum"]},
+{id:"archaea",label:"Archaea",examples:[
+"Methanocaldococcus jannaschii","Haloferax volcanii",
+"Sulfolobus acidocaldarius","Pyrococcus furiosus",
+"Thermococcus kodakarensis","Archaeoglobus fulgidus",
+"Nanoarchaeum equitans","Methanosarcina mazei"]}
+];
+
+const ALL_SPECIES=GROUPS.flatMap(
+g=>g.examples.map(name=>({name,group:g.id}))
+);
+
+/* ---------- EXISTING PRIMER RECORDS ---------- */
+
+const PRIMER_LIBRARY={
+invertebrate:{
+id:"LCO1490 / HCO2198",target:"COI",
+forward:"GGTCAACAAATCATAAAGATATTGG",
+reverse:"TAAACTTCAGGGTGACCAAAAAATCA"},
+fish:{
+id:"FishF1 / FishR1",target:"COI",
+forward:"TCAACCAACCACAAAGACATTGGCAC",
+reverse:"TAGACTTCTGGGTGGCCAAAGAATCA"},
+plant:{
+id:"rbcL-1F / rbcL-724R",target:"rbcL",
+forward:"ATGTCACCACAAACAGAAAC",
+reverse:"TCGCATGATCCTGCAGTAGC"},
+fungal:{
+id:"ITS1 / ITS4",target:"ITS",
+forward:"TCCGTAGGTGAACCTGCGG",
+reverse:"TCCTCCGCTTATTGATATGC"}
+};
+
+const PRIMER_SPECIES={
+"Danio rerio":"fish",
+"Drosophila melanogaster":"invertebrate",
+"Apis mellifera":"invertebrate",
+"Octopus vulgaris":"invertebrate"
+};
+
+GROUPS.find(g=>g.id==="plant").examples.forEach(
+s=>PRIMER_SPECIES[s]="plant"
+);
+[
+"Saccharomyces cerevisiae","Neurospora crassa",
+"Schizosaccharomyces pombe","Ustilago maydis",
+"Coprinopsis cinerea","Aspergillus niger",
+"Aspergillus nidulans","Penicillium chrysogenum",
+"Rhizopus stolonifer","Mucor circinelloides",
+"Fusarium oxysporum","Trichoderma reesei",
+"Botrytis cinerea"
+].forEach(s=>PRIMER_SPECIES[s]="fungal");
+
+/*
+ All listed pairs are candidates drawn from published
+ broad-range primer records. Their compatibility with
+ a specific strain or specimen must still be verified.
+*/
+
+function primerFor(species){
+return PRIMER_LIBRARY[PRIMER_SPECIES[species]]||null;
+}
+
+/* ---------- SAFETY CATEGORIES ---------- */
+
+const AVOID_HOME=new Set([
+"Mycobacterium tuberculosis",
+"Staphylococcus aureus",
+"Streptococcus pneumoniae",
+"Salmonella enterica",
+"Pseudomonas aeruginosa",
+"Vibrio cholerae",
+"Influenza A virus",
+"Severe acute respiratory syndrome coronavirus 2",
+"Human immunodeficiency virus 1",
+"Measles morbillivirus",
+"Hepatitis B virus",
+"Dengue virus",
+"Candida albicans",
+"Cryptococcus neoformans",
+"Aspergillus fumigatus",
+"Plasmodium falciparum",
+"Trypanosoma brucei",
+"Schistosoma mansoni",
+"Giardia intestinalis",
+"Toxoplasma gondii",
+"Leishmania major",
+"Brugia malayi",
+"Trichinella spiralis",
+"Entamoeba histolytica",
+"Acanthamoeba castellanii"
+]);
+
+const VERTEBRATES=new Set([
+"Homo sapiens","Mus musculus","Danio rerio",
+"Gallus gallus","Bos taurus","Canis lupus familiaris",
+"Felis catus","Pan troglodytes","Equus caballus",
+"Sus scrofa","Ovis aries","Xenopus tropicalis"
+]);
+
+const YEASTS=new Set([
+"Saccharomyces cerevisiae",
+"Schizosaccharomyces pombe"
+]);
+
+/* ---------- P-NUMBER FOLDER DATABASE ---------- */
+
+const FOLDERS={
+P1:{name:"Plant DNA Research",
+desc:"Plant tissue and DNA barcoding",
+equipment:["Specimen containers","Microscope","Label printer",
+"Micropipettes","Tubes and racks","DNA extraction reagents",
+"Centrifuge","Thermal cycler","Gel electrophoresis system",
+"Gel imager","Sequencing access"]},
+
+P2:{name:"Invertebrate DNA Research",
+desc:"Insects, mollusks and nematodes",
+equipment:["Specimen containers","Microscope","Label printer",
+"Micropipettes","Tubes and racks","DNA extraction reagents",
+"Centrifuge","Thermal cycler","Gel electrophoresis system",
+"Gel imager","Sequencing access"]},
+
+P3:{name:"Vertebrate DNA Research",
+desc:"Fish, mammals, birds and amphibians",
+equipment:["Authorized specimen material","Specimen containers",
+"Microscope","Micropipettes","Tubes and racks",
+"DNA extraction reagents","Centrifuge","Thermal cycler",
+"Gel electrophoresis system","Gel imager","Sequencing access"]},
+
+P4:{name:"Low-Risk Bacterial DNA Research",
+desc:"Only individually verified appropriate educational strains",
+equipment:["Verified strain and source","Micropipettes",
+"Tubes and racks","Appropriate containment",
+"Validated DNA extraction reagents","Thermal cycler",
+"Gel electrophoresis system"]},
+
+P5:{name:"Yeast DNA Research",
+desc:"Verified low-risk yeast strains",
+equipment:["Verified strain and source","Microscope",
+"Micropipettes","Tubes and racks","DNA extraction reagents",
+"Centrifuge","Thermal cycler","Gel electrophoresis system"]},
+
+P6:{name:"Mushroom and Fungal DNA Research",
+desc:"Species- and strain-dependent fungal research",
+equipment:["Verified specimen","Microscope","Micropipettes",
+"Tubes and racks","Fungal DNA extraction reagents",
+"Centrifuge","Thermal cycler","Gel electrophoresis system",
+"Gel imager","Sequencing access"]},
+
+P7:{name:"Amoeba and Protist Research",
+desc:"Species-dependent; reference data by default",
+equipment:["Computer","Reference genome database","Microscope"]},
+
+P8:{name:"Archaeal Research",
+desc:"Specialized organisms and public genomic references",
+equipment:["Computer","Reference genome database"]},
+
+P9:{name:"Viral Genome Research",
+desc:"Public reference sequence research",
+equipment:["Computer","Reference genome database"]},
+
+P10:{name:"Parasite Genome Research",
+desc:"Public reference sequence research",
+equipment:["Computer","Reference genome database"]},
+
+P11:{name:"Restricted Organism Research",
+desc:"Computational research; avoid home laboratory handling",
+equipment:["Computer","Scientific literature","Reference genome database"]},
+
+P12:{name:"CRISPR-Cas9 Research",
+desc:"Educational and computational genome research",
+equipment:["Computer","CRISPR research references","Reference genome database"]}
+};
+
+function groupFor(name){
+return ALL_SPECIES.find(s=>s.name===name)?.group||"";
+}
+
+function folderFor(name){
+const group=groupFor(name);
+if(AVOID_HOME.has(name))return "P11";
+if(group==="virus")return "P9";
+if(group==="parasite")return "P10";
+if(group==="archaea")return "P8";
+if(group==="amoeba")return "P7";
+if(group==="plant")return "P1";
+if(YEASTS.has(name))return "P5";
+if(group==="fungi"||group==="mold")return "P6";
+if(group==="bacteria")return "P4";
+if(VERTEBRATES.has(name))return "P3";
+if(group==="animal")return "P2";
+return "P11";
+}
+
+function isReferenceOnly(name,id){
+return AVOID_HOME.has(name)||
+["P7","P8","P9","P10","P11","P12"].includes(id);
+}
+
+/* ---------- LAB EQUIPMENT INVENTORY ---------- */
+
+const DEFAULT_EQUIPMENT={
+"Specimen containers":"owned",
+"Microscope":"owned",
+"Label printer":"owned",
+"Micropipettes":"owned",
+"Tubes and racks":"owned",
+"Computer":"owned",
+"Mini refrigerator":"owned",
+"Incubator":"owned",
+"PCR workstation (UV/ozone)":"owned",
+"Agar powder":"owned",
+"Reusable inoculation loops":"owned",
+"DNA extraction reagents":"verify",
+"Validated DNA extraction reagents":"verify",
+"Fungal DNA extraction reagents":"verify",
+"Centrifuge":"verify",
+"Thermal cycler":"verify",
+"Gel electrophoresis system":"verify",
+"Gel imager":"verify",
+"Sequencing access":"planned",
+"Oxford Nanopore MinION":"planned",
+"miniPCR CRISPR kit":"planned",
+"Autoclave":"planned",
+"Ventilated enclosure":"planned",
+"TSA medium":"planned",
+"SDA medium":"planned",
+"Verified specimen":"verify",
+"Verified strain and source":"verify",
+"Authorized specimen material":"verify",
+"Appropriate containment":"verify",
+"Reference genome database":"available",
+"Scientific literature":"available",
+"CRISPR research references":"available"
+};
+
+/* ---------- SHARED PROCEDURE STEPS ---------- */
+
+/*
+ A step is part of a reusable master SOP.
+ Values are saved by P-number and field,
+ so changing P1 updates all compatible species.
+
+ No numerical conditions are assumed correct until
+ an appropriate source SOP has been reviewed.
+*/
+
+const LAB_STEPS=[
+{
+title:"Specimen Preparation and Labeling",
+action:"Verify sample identity, source, and approval. Record the physical sample quantity and assign a unique specimen ID.",
+equipment:["Specimen containers","Label printer"],
+fields:[
+["Sample type","Tissue, leaf, or other material"],
+["Specimen quantity","mg, g, or µL"],
+["Collection source","Source and permissions"],
+["Specimen ID","Unique identifier"]]
+},
+{
+title:"Voucher Photography",
+action:"Photograph distinguishing features using the microscope and save the image files under the specimen ID.",
+equipment:["Microscope","Computer"],
+fields:[
+["Microscope model","Manufacturer and model"],
+["Photographic views","Top, side, aperture, etc."],
+["Image references","Image filenames"]]
+},
+{
+title:"DNA Extraction",
+action:"Prepare the specimen using an approved extraction SOP appropriate for the exact biological material.",
+equipment:["Micropipettes","Tubes and racks","DNA extraction reagents","Incubator"],
+fields:[
+["SOP title and version","Required"],
+["Sample quantity","mg or µL"],
+["Lysis buffer name","Exact product"],
+["Lysis buffer concentration","Stock concentration"],
+["Lysis buffer volume","µL"],
+["Enzyme name","Exact enzyme"],
+["Enzyme concentration","Stock concentration"],
+["Enzyme volume","µL"],
+["Incubation temperature","°C"],
+["Incubation time","minutes or hours"],
+["Mixing action","Method and duration"]]
+},
+{
+title:"DNA Purification",
+action:"Follow the validated purification, separation, wash, and elution procedure.",
+equipment:["Micropipettes","Tubes and racks","Centrifuge"],
+fields:[
+["Purification method","Column, beads, etc."],
+["Binding reagent","Name and µL"],
+["Wash buffer","Name and µL"],
+["Number of washes","Validated count"],
+["Centrifuge force","×g"],
+["Centrifuge time","minutes"],
+["Centrifuge temperature","°C"],
+["Elution reagent","Name"],
+["Elution volume","µL"],
+["DNA recovered","µL"]]
+},
+{
+title:"DNA Quality Assessment",
+action:"Measure DNA quality using an applicable reviewed method. Record the measurement and quality controls.",
+equipment:["Micropipettes","Gel electrophoresis system","Gel imager"],
+fields:[
+["QC method","Gel or measurement method"],
+["DNA concentration","ng/µL"],
+["A260/A280","Measured value, if available"],
+["A260/A230","Measured value, if available"],
+["Agarose concentration","%"],
+["Agarose mass","g"],
+["Running buffer","Type and mL"],
+["Sample loading volume","µL"],
+["DNA ladder","Product and volume"],
+["Voltage","V"],
+["Run time","minutes"],
+["Result","Observed DNA quality"]]
+},
+{
+title:"PCR Reaction Preparation",
+action:"Use the verified reaction recipe for the target, specimen, compatible primers, and polymerase chemistry.",
+equipment:["Micropipettes","Tubes and racks","Thermal cycler"],
+fields:[
+["PCR SOP and version","Reference"],
+["DNA template concentration","ng/µL"],
+["DNA template volume","µL"],
+["Master mix product","Manufacturer"],
+["Master mix volume","µL"],
+["Forward primer concentration","µM"],
+["Forward primer volume","µL"],
+["Reverse primer concentration","µM"],
+["Reverse primer volume","µL"],
+["Water volume","µL"],
+["Total reaction volume","µL"],
+["Positive control","Description"],
+["Negative control","Description"]]
+},
+{
+title:"PCR Thermal Cycling",
+action:"Load the validated temperature program specific to the PCR chemistry and target.",
+equipment:["Thermal cycler"],
+fields:[
+["Thermal cycler model","Manufacturer and model"],
+["Initial denaturation temperature","°C"],
+["Initial denaturation time","seconds or minutes"],
+["Denaturation temperature","°C"],
+["Denaturation time","seconds"],
+["Annealing temperature","°C"],
+["Annealing time","seconds"],
+["Extension temperature","°C"],
+["Extension time","seconds"],
+["Number of cycles","Cycles"],
+["Final extension temperature","°C"],
+["Final extension time","minutes"]]
+},
+{
+title:"PCR Gel Electrophoresis",
+action:"Use the appropriate documented gel procedure and record all controls, ladder, and specimen lanes.",
+equipment:["Gel electrophoresis system","Gel imager"],
+fields:[
+["Expected amplicon","bp"],
+["Agarose percentage","%"],
+["Agarose mass","g"],
+["Running buffer type","TAE, TBE, etc."],
+["Running buffer volume","mL"],
+["DNA stain","Product name"],
+["DNA ladder","Product and bp range"],
+["Ladder loading volume","µL"],
+["PCR sample loading volume","µL"],
+["Loading dye volume","µL"],
+["Voltage","V"],
+["Run time","minutes"],
+["Gel image","Filename"]]
+},
+{
+title:"Evaluate PCR Results",
+action:"Compare sample bands with the expected product and evaluate all controls. Do not assume a visible band proves target identity.",
+equipment:["Computer","Gel imager"],
+fields:[
+["Expected band length","bp"],
+["Observed band length","bp"],
+["Positive control result","Pass/fail"],
+["Negative control result","Pass/fail"],
+["Unexpected bands","Description"],
+["Smearing","Description"],
+["Result decision","Pass, fail, inconclusive"],
+["Investigation","Findings or deviations"]]
+},
+{
+title:"DNA Sequencing",
+action:"Use an appropriate external sequencing service or verified compatible instrument. Document sequencing input criteria and generated files.",
+equipment:["Sequencing access","Computer"],
+fields:[
+["Sequencing method","Sanger, nanopore, etc."],
+["Instrument or service","Name"],
+["Sample input requirement","Verified amount and purity"],
+["Library preparation","Documented method or kit"],
+["Quality-control requirements","Source criteria"],
+["Sequence data","FASTA, FASTQ, BAM, etc."],
+["Reference accession","Versioned accession"],
+["Analysis results","Sequence comparison and confidence"]]
+},
+{
+title:"Store, Repeat, Review or Dispose",
+action:"Determine the next action from the sample-specific acceptance criteria and validated storage/disposal instructions.",
+equipment:["Tubes and racks"],
+fields:[
+["Decision","Store, repeat, review, dispose"],
+["Storage temperature","°C"],
+["Storage duration","Validated time"],
+["Storage container","Container type"],
+["Storage location","Box and position"],
+["Disposal SOP","Reference"],
+["Reason for repeating","Documented reason"]]
+},
+{
+title:"Paper Notebook and Research Report",
+action:"Document the experiment, deviations, controls, observations, results, and review status in the physical notebook.",
+equipment:["Computer"],
+fields:[
+["Experiment ID","Unique ID"],
+["Notebook number","Physical notebook"],
+["Notebook pages","Page range"],
+["Date","Experiment date"],
+["Protocol source","Citation/version"],
+["Reviewer","Name or role"],
+["Review status","Pending/approved"],
+["Research conclusion","Summary"]]
+}
+];
+
+const COMPUTATIONAL_STEPS=[
+"Select an authoritative public reference genome or sequence record.",
+"Record the organism name, reference accession, and source.",
+"Review documented genes, annotations, and publications.",
+"Perform appropriate computational sequence comparisons.",
+"Record findings, uncertainties, and references in the research notebook."
+];
+
+/* ---------- STORAGE AND UTILITIES ---------- */
+
+const $=id=>document.getElementById(id);
+const escapeHTML=v=>String(v??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+
+function readJSON(key,fallback){
+try{return JSON.parse(localStorage.getItem(key))??fallback}
+catch{return fallback}
+}
+function writeJSON(key,data){
+try{localStorage.setItem(key,JSON.stringify(data));return true}
+catch{alert("Browser storage unavailable.");return false}
+}
+let inventory=readJSON("genome-inventory-v1",DEFAULT_EQUIPMENT);
+let sopData=readJSON("genome-sops-v1",{});
+let notebookData=readJSON("genome-notebook-v1",[]);
+let selectedSpecies="Danio rerio";
+let selectedFolder="P3";
+
+function downloadJSON(name,data){
+const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download=name;a.click();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function statusOf(item){return inventory[item]||"verify"}
+function statusLabel(item){
+const value=statusOf(item);
+const labels={
+owned:"✔ Owned",planned:"◷ Planned",
+verify:"? Needs verification",available:"✔ Available",
+missing:"✘ Missing"
+};
+return `<span class="${value==="owned"||value==="available"?"good":value==="planned"?"planned":"bad"}">${labels[value]||labels.verify}</span>`;
+}
+
+function renderEquipment(names){
+return `<div class="card"><h3>🧰 Required Equipment</h3>
+${names.map(n=>`<p>${escapeHTML(n)} — ${statusLabel(n)}</p>`).join("")}
+<p class="muted small">Equipment ownership does not establish procedure suitability or biological containment.</p></div>`;
+}
+
+function primerHTML(species){
+const p=primerFor(species);
+if(!p)return `<div class="warn">No curated primer pair stored for this species. Published target and compatibility verification required.</div>`;
+return `<div class="card"><h3>🧬 Primer Record</h3>
+<p><b>Identifier:</b> ${escapeHTML(p.id)}</p>
+<p><b>Target:</b> ${escapeHTML(p.target)}</p>
+<p><b>Forward 5′→3′:</b><br><span class="seq">${escapeHTML(p.forward)}</span></p>
+<p><b>Reverse 5′→3′:</b><br><span class="seq">${escapeHTML(p.reverse)}</span></p>
+<div class="warn small">Broad-range published candidate; suitability and specificity for this particular species or strain have not been established here.</div>
+</div>`;
+}
+
+/* ---------- WEBSITE NAVIGATION ---------- */
+
+function switchView(id){
+document.querySelectorAll(".view").forEach(x=>x.hidden=x.id!==id);
+document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
+if(id==="procedures")renderProcedures();
+if(id==="inventory")renderInventory();
+if(id==="notebook")renderNotebook();
+if(id==="bio")renderPrimer();
+window.scrollTo(0,0);
+}
+
+document.querySelectorAll("nav button").forEach(b=>{
+b.addEventListener("click",()=>switchView(b.dataset.view));
+});
+
+function fillSelect(id){
+const el=$(id);
+ALL_SPECIES.forEach(s=>{
+const option=document.createElement("option");
+option.value=s.name;option.textContent=s.name;
+el.appendChild(option);
+});
+}
+
+[
+"geneSpecies","bioSpecies","procedureSpecies",
+"nbSpecies","workflowSpecies"
+].forEach(fillSelect);
+
+$("geneSpecies").value="Homo sapiens";
+$("bioSpecies").value="Danio rerio";
+$("procedureSpecies").value="Danio rerio";
+
+/* ---------- SPECIES CATALOG ---------- */
+
+let currentGroup="human";
+function renderGroupButtons(){
+$("groupButtons").innerHTML=GROUPS.map(g=>
+`<button class="${currentGroup===g.id?"selected":""}" data-group="${g.id}">${g.label}</button>`
+).join("");
+$("groupButtons").querySelectorAll("button").forEach(b=>{
+b.onclick=()=>{currentGroup=b.dataset.group;renderGroupButtons();renderSpeciesCards()};
+});
+}
+function renderSpeciesCards(){
+const query=$("speciesSearch").value.toLowerCase();
+const matches=ALL_SPECIES.filter(s=>
+s.group===currentGroup&&s.name.toLowerCase().includes(query)
+);
+$("speciesCards").innerHTML=matches.map(s=>
+`<button class="folder" data-species="${escapeHTML(s.name)}">
+ <strong>${escapeHTML(s.name)}</strong>
+ <p class="muted small">${escapeHTML(s.group)} · ${folderFor(s.name)} procedure</p>
+</button>`).join("");
+$("speciesCards").querySelectorAll("button").forEach(b=>{
+b.onclick=()=>openSpeciesDetail(b.dataset.species);
+});
+}
+function openSpeciesDetail(name){
+$("speciesDetails").innerHTML=`
+<div class="card">
+<h2>${escapeHTML(name)}</h2>
+<p>Procedure: <b>${folderFor(name)}</b></p>
+${AVOID_HOME.has(name)?'<div class="danger">Avoid handling in an ordinary home laboratory. Reference research only.</div>':""}
+${primerHTML(name)}
+<button class="action" id="goSpeciesProcedure">Open Laboratory Procedure</button>
+<a href="https://www.ncbi.nlm.nih.gov/taxonomy/?term=${encodeURIComponent(name)}" target="_blank" rel="noopener">NCBI Taxonomy</a>
+</div>`;
+$("goSpeciesProcedure").onclick=()=>{
+selectedSpecies=name;
+selectedFolder=folderFor(name);
+$("procedureSpecies").value=name;
+switchView("procedures");
+};
+}
+$("speciesSearch").oninput=renderSpeciesCards;
+renderGroupButtons();
+renderSpeciesCards();
+
+/* ---------- NCBI GENE SEARCH ---------- */
+
+async function ncbiSearch(db,term,limit=8){
+const root="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+const q=new URLSearchParams({db,term,retmax:String(limit),retmode:"json"});
+const res=await fetch(root+"esearch.fcgi?"+q);
+if(!res.ok)throw Error("NCBI search request failed");
+const data=await res.json();
+const ids=data.esearchresult?.idlist||[];
+if(!ids.length)return [];
+const summary=await fetch(root+"esummary.fcgi?"+new URLSearchParams({
+db,id:ids.join(","),retmode:"json"
+}));
+if(!summary.ok)throw Error("NCBI summary request failed");
+const result=(await summary.json()).result||{};
+return ids.map(id=>({id,record:result[id]||{}}));
+}
+
+$("geneSearchButton").onclick=async()=>{
+const species=$("geneSpecies").value;
+const gene=$("geneQuery").value.trim();
+const out=$("geneResults");
+if(!gene)return;
+out.textContent="Searching NCBI...";
+try{
+const rows=await ncbiSearch("gene",`${gene}[Gene Name] AND "${species}"[Organism]`);
+out.innerHTML=rows.length?rows.map(({id,record:r})=>`
+<div class="card"><h3>${escapeHTML(r.name||gene)}</h3>
+<p>${escapeHTML(r.description||"Description unavailable")}</p>
+<p>${escapeHTML(r.summary||"No function summary available")}</p>
+<a href="https://www.ncbi.nlm.nih.gov/gene/${encodeURIComponent(id)}" target="_blank" rel="noopener">NCBI Gene ${escapeHTML(id)}</a>
+</div>`).join(""):"No matching NCBI Gene records.";
+}catch(e){out.textContent="Search unavailable: "+e.message}
+};
+
+function renderPrimer(){
+$("primerResults").innerHTML=primerHTML($("bioSpecies").value);
+}
+$("bioSpecies").onchange=renderPrimer;
+
+$("bioButton").onclick=async()=>{
+const species=$("bioSpecies").value;
+const gene=$("bioGene").value.trim();
+const out=$("bioResults");
+if(!gene)return;
+out.textContent="Searching...";
+try{
+const rows=await ncbiSearch("gene",`${gene}[Gene Name] AND "${species}"[Organism]`,3);
+out.innerHTML=rows.length?rows.map(({id,record:r})=>`
+<div class="card"><h3>${escapeHTML(r.name||gene)}</h3>
+<p>${escapeHTML(r.description||"")}</p>
+<p>Chromosome: ${escapeHTML(r.chromosome||"Unknown")}</p>
+<p>${escapeHTML(r.summary||"")}</p>
+<a href="https://www.ncbi.nlm.nih.gov/gene/${encodeURIComponent(id)}" target="_blank" rel="noopener">NCBI Gene record</a>
+</div>`).join(""):"No matching gene found.";
+}catch(e){out.textContent=e.message}
+};
+
+$("fastaButton").onclick=()=>{
+const raw=$("fastaInput").value;
+const sequence=raw.split(/\r?\n/).filter(x=>!x.startsWith(">")).join("").replace(/\s+/g,"").toUpperCase();
+if(!/^[ACGTRYSWKMBDHVN]*$/.test(sequence)||!sequence.length){
+$("fastaResults").textContent="Invalid or empty DNA sequence.";
+return;
+}
+const gc=(sequence.match(/[GC]/g)||[]).length;
+const comp={A:"T",T:"A",G:"C",C:"G",R:"Y",Y:"R",S:"S",W:"W",K:"M",M:"K",B:"V",V:"B",D:"H",H:"D",N:"N"};
+const reverse=[...sequence].reverse().map(x=>comp[x]).join("");
+$("fastaResults").innerHTML=`<p>Length: ${sequence.length} bases</p>
+<p>GC: ${(100*gc/sequence.length).toFixed(2)}% (ambiguous bases included in length)</p><pre>${reverse}</pre>`;
+};
+
+/* ---------- PROCEDURE FOLDER ENGINE ---------- */
+
+function renderFolderButtons(){
+$("procedureFolders").innerHTML=Object.entries(FOLDERS).map(([id,f])=>
+`<button class="folder ${selectedFolder===id?"active":""}" data-folder="${id}">
+📁 <strong>${id} — ${escapeHTML(f.name)}</strong>
+<div class="muted small">${escapeHTML(f.desc)}</div>
+</button>`).join("");
+$("procedureFolders").querySelectorAll("button").forEach(b=>{
+b.onclick=()=>{
+selectedFolder=b.dataset.folder;
+const linked=ALL_SPECIES.filter(s=>folderFor(s.name)===selectedFolder);
+if(linked.length){
+selectedSpecies=linked[0].name;
+$("procedureSpecies").value=selectedSpecies;
+}
+renderProcedures();
+};
+});
+}
+
+function sopFieldKey(folder,index,name){
+return `${folder}:${index}:${name}`;
+}
+function getSOP(folder,index,name){
+return sopData[sopFieldKey(folder,index,name)]||"";
+}
+function setSOP(folder,index,name,value){
+sopData[sopFieldKey(folder,index,name)]=value;
+writeJSON("genome-sops-v1",sopData);
+}
+
+function renderSOPStep(step,index){
+const id=index+1;
+const fields=step.fields.map(([name,unit])=>{
+const key=sopFieldKey(selectedFolder,index,name);
+return `<label>${escapeHTML(name)} <span class="muted small">(${escapeHTML(unit)})</span>
+<input class="sop-field" data-key="${escapeHTML(key)}" value="${escapeHTML(getSOP(selectedFolder,index,name))}" placeholder="Enter verified SOP value"></label>`;
+}).join("");
+
+return `<details class="step">
+<summary>Step ${id} — ${escapeHTML(step.title)}</summary>
+<p>${escapeHTML(step.action)}</p>
+<p><strong>Equipment:</strong> ${step.equipment.map(escapeHTML).join(", ")}</p>
+<div class="warn small">Only enter numerical parameters supported by a reviewed protocol. Empty fields indicate incomplete SOP data.</div>
+<div class="grid">${fields}</div>
+<label>Detailed physical actions from source SOP
+<textarea class="sop-field" data-key="${escapeHTML(sopFieldKey(selectedFolder,index,"physical"))}" placeholder="Document reviewed actions">${escapeHTML(getSOP(selectedFolder,index,"physical"))}</textarea>
+</label>
+<label>Source citation, manufacturer manual, or version
+<input class="sop-field" data-key="${escapeHTML(sopFieldKey(selectedFolder,index,"source"))}" value="${escapeHTML(getSOP(selectedFolder,index,"source"))}" placeholder="SOP / source citation"></label>
+</details>`;
+}
+
+function renderResearchSteps(){
+return `<div class="danger"><strong>Reference research only.</strong>
+Do not culture or process organisms requiring specialized containment in an ordinary home laboratory. Some classifications depend on strain and sample source.</div>`+
+COMPUTATIONAL_STEPS.map((step,i)=>
+`${i?'<div class="arrow">↓</div>':""}<div class="step">
+<strong>Step ${i+1}</strong><p>${escapeHTML(step)}</p></div>`).join("");
+}
+
+function renderProcedures(){
+renderFolderButtons();
+const f=FOLDERS[selectedFolder];
+const actual=folderFor(selectedSpecies);
+const compatible=actual===selectedFolder;
+const referenceOnly=isReferenceOnly(selectedSpecies,selectedFolder);
+const linked=ALL_SPECIES.filter(s=>folderFor(s.name)===selectedFolder).map(s=>s.name);
+$("procedureHeader").innerHTML=`
+<div class="card"><h2>📂 ${selectedFolder} — ${escapeHTML(f.name)}</h2>
+<p><strong>Species:</strong> <i>${escapeHTML(selectedSpecies)}</i></p>
+<p><strong>Linked species:</strong> <span class="muted small">${escapeHTML(linked.join(", ")||"Reference-only")}</span></p>
+${compatible?"":'<div class="warn">The selected species is not assigned to this procedure folder.</div>'}
+${referenceOnly?'<div class="danger">Avoid home-laboratory handling; computational reference workflow only.</div>':'<div class="warn">Template only. Exact protocol and species compatibility require review before laboratory use.</div>'}
+</div>${renderEquipment(f.equipment)}
+${!referenceOnly?primerHTML(selectedSpecies):""}`;
+
+if(referenceOnly){
+$("procedureBody").innerHTML=renderResearchSteps();
+return;
+}
+$("procedureBody").innerHTML=
+LAB_STEPS.map((step,index)=>renderSOPStep(step,index)+
+(index<LAB_STEPS.length-1?'<div class="arrow">↓</div>':"")).join("")+
+`<div class="card">
+<h3>Results Decision</h3>
+<p><b>PASS →</b> Proceed only if the documented acceptance criteria and controls are satisfied.</p>
+<p><b>FAIL →</b> Investigate the cause before repeating.</p>
+<p><b>STORE →</b> Follow validated sample-specific storage instructions.</p>
+<p><b>DISPOSE →</b> Follow applicable waste and contamination rules.</p>
+</div>`;
+
+$("procedureBody").querySelectorAll(".sop-field").forEach(el=>{
+el.onchange=()=>{
+const key=el.dataset.key;
+sopData[key]=el.value;
+writeJSON("genome-sops-v1",sopData);
+};
+});
+}
+
+function filterProcedureSpecies(){
+const query=$("procedureSearch").value.toLowerCase();
+const select=$("procedureSpecies");
+const current=selectedSpecies;
+select.innerHTML="";
+ALL_SPECIES.filter(s=>s.name.toLowerCase().includes(query)).forEach(s=>{
+const opt=document.createElement("option");
+opt.value=s.name;opt.textContent=s.name;
+select.appendChild(opt);
+});
+if([...select.options].some(o=>o.value===current))select.value=current;
+}
+
+function openSelectedProcedure(){
+const value=$("procedureSpecies").value;
+if(!value)return;
+selectedSpecies=value;
+selectedFolder=folderFor(value);
+renderProcedures();
+}
+
+$("procedureSearch").oninput=filterProcedureSpecies;
+$("procedureSpecies").onchange=openSelectedProcedure;
+$("autoProcedure").onclick=openSelectedProcedure;
+
+$("expandAll").onclick=()=>{
+$("procedureBody").querySelectorAll("details").forEach(x=>x.open=true);
+};
+$("collapseAll").onclick=()=>{
+$("procedureBody").querySelectorAll("details").forEach(x=>x.open=false);
+};
+$("printProcedure").onclick=()=>{
+$("procedureBody").querySelectorAll("details").forEach(x=>x.open=true);
+window.print();
+};
+$("exportSOP").onclick=()=>downloadJSON("genome-sops.json",sopData);
+$("importSOP").onchange=async e=>{
+const file=e.target.files[0];
+if(!file)return;
+try{
+const obj=JSON.parse(await file.text());
+if(!obj||typeof obj!=="object"||Array.isArray(obj))throw Error("Invalid SOP data");
+sopData=obj;
+writeJSON("genome-sops-v1",sopData);
+renderProcedures();
+alert("SOP fields imported.");
+}catch(error){alert("Import failed: "+error.message)}
+};
+
+/* ---------- INVENTORY ---------- */
+
+function renderInventory(){
+$("inventoryList").innerHTML=Object.entries(inventory).sort().map(([name,status])=>`
+<div class="card">
+<strong>${escapeHTML(name)}</strong>
+<select class="equipment-status" data-item="${escapeHTML(name)}">
+${["owned","planned","verify","missing","available"].map(v=>
+`<option value="${v}" ${status===v?"selected":""}>${v}</option>`).join("")}
+</select>
+</div>`).join("");
+$("inventoryList").querySelectorAll("select").forEach(el=>{
+el.onchange=()=>{
+inventory[el.dataset.item]=el.value;
+writeJSON("genome-inventory-v1",inventory);
+};
+});
+}
+
+/* ---------- PAPER NOTEBOOK INDEX ---------- */
+
+function renderNotebook(){
+$("nbList").innerHTML=notebookData.map((n,i)=>`
+<div class="card">
+<strong>${escapeHTML(n.id)}</strong> — <i>${escapeHTML(n.species)}</i>
+<p>Notebook: ${escapeHTML(n.book)}, pages ${escapeHTML(n.pages)}</p>
+<p>${escapeHTML(n.notes)}</p>
+<button class="secondary" data-delete="${i}">Delete</button>
+</div>`).join("");
+$("nbList").querySelectorAll("[data-delete]").forEach(b=>{
+b.onclick=()=>{
+notebookData.splice(Number(b.dataset.delete),1);
+writeJSON("genome-notebook-v1",notebookData);
+renderNotebook();
+};
+});
+}
+$("nbSave").onclick=()=>{
+const id=$("nbExperiment").value.trim();
+if(!id)return alert("Enter an experiment ID.");
+notebookData.push({
+id,species:$("nbSpecies").value,
+book:$("nbBook").value,
+pages:$("nbPages").value,
+notes:$("nbNotes").value
+});
+writeJSON("genome-notebook-v1",notebookData);
+renderNotebook();
+};
+$("nbExport").onclick=()=>downloadJSON("notebook-index.json",notebookData);
+
+/* ---------- RESEARCH LINKS ---------- */
+
+$("assistantButton").onclick=()=>{
+const q=$("assistantQuery").value.trim();
+if(!q)return;
+const u=encodeURIComponent(q);
+$("assistantResults").innerHTML=`
+<div class="card"><h3>Research Sources</h3>
+<p><a target="_blank" rel="noopener" href="https://pubmed.ncbi.nlm.nih.gov/?term=${u}">PubMed</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/gene/?term=${u}">NCBI Gene</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.uniprot.org/uniprotkb?query=${u}">UniProt</a></p>
+<p class="muted">These links open scientific databases; no AI model is connected.</p>
+</div>`;
+};
+
+$("workflowButton").onclick=()=>{
+const name=$("workflowSpecies").value;
+const gene=$("workflowGene").value.trim();
+$("workflowResult").innerHTML=`
+<div class="card">
+<h3>${escapeHTML(name)} — ${escapeHTML(gene)}</h3>
+<p>1. Identify reference genome and assembly version.</p>
+<p>2. Find documented gene annotations.</p>
+<p>3. Review relevant publications and known variants.</p>
+<p>4. Compare publicly available sequences using established bioinformatics tools.</p>
+<p>5. Record sources, findings, uncertainties, and notebook references.</p>
+<p><a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/gene/?term=${encodeURIComponent(gene+" "+name)}">Search NCBI</a></p>
+</div>`;
+};
+
+/* ---------- INITIALIZATION ---------- */
+
+filterProcedureSpecies();
+$("procedureSpecies").value=selectedSpecies;
+renderProcedures();
+renderPrimer();
+renderInventory();
+renderNotebook();
+
 </script>
-<!-- END LABORATORY PROCEDURE LIBRARY -->
+</body>
+</html>
