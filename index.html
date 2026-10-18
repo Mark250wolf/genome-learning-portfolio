@@ -5,49 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Genome Learning Portfolio | Mark Gonzalez</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: url("background.png") no-repeat center center fixed;
-  background-size: cover;
-}
-.research-nav {
-  background: #061428;
-  color: #e8fbff;
-  padding: 10px 18px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  align-items: center;
-  font-size: 13px;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-.research-nav button, .research-nav a {
-  background: none;
-  border: 0;
-  color: #5eead4;
-  cursor: pointer;
-  font: inherit;
-  text-decoration: none;
-}
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: url("background.png") no-repeat center center fixed; background-size: cover; }
+.research-nav { background: #061428; color: #e8fbff; padding: 10px 18px; display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; font-size: 13px; position: sticky; top: 0; z-index: 20; }
+.research-nav button { background: none; border: 0; color: #5eead4; cursor: pointer; font: inherit; }
 .research-nav button.active { color: #67e8f9; font-weight: bold; }
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  padding: 50px 40px;
-  position: relative;
-}
-.top-logos {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
+.container { max-width: 1000px; margin: 0 auto; background: white; padding: 50px 40px; position: relative; }
+.top-logos { position: absolute; top: 20px; right: 30px; display: flex; gap: 12px; align-items: center; }
 .top-logos img { width: 120px; height: auto; display: block; }
 h1 { color: #0b5fff; margin-top: 0; }
 h2 { color: #0b5fff; margin-top: 50px; }
@@ -69,36 +32,25 @@ a:hover { text-decoration: underline; }
 .dash.on { display: block; }
 .wrap { max-width: 1100px; margin: 0 auto; }
 .dash h1, .dash h2 { color: #67e8f9; margin-top: 0; }
+.dash a { color: #67e8f9; }
 .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; }
-.dash input, .dash select, .dash textarea {
-  width: 100%; box-sizing: border-box; margin: 6px 0; padding: 8px;
-  background: #020617; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px;
-}
-.dash button.go, .dash button.more {
-  background: #67e8f9; color: #020617; border: 0; padding: 8px 14px;
-  border-radius: 6px; font-weight: bold; cursor: pointer; margin: 6px 6px 6px 0;
-}
+.dash input, .dash textarea { width: 100%; box-sizing: border-box; margin: 6px 0; padding: 8px; background: #020617; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; }
+.dash button.go, .dash button.more { background: #67e8f9; color: #020617; border: 0; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; margin: 6px 6px 6px 0; }
 .muted { color: #94a3b8; font-size: 14px; }
 .err { color: #fca5a5; }
 .note { color: #fde68a; font-size: 14px; }
-pre { white-space: pre-wrap; font-size: 13px; }
-.cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 14px 0; }
-.cat-btn {
-  background: #0b3a4a; color: #ecfeff; border: 1px solid #22d3ee; border-radius: 10px;
-  padding: 14px 10px; cursor: pointer; font-weight: bold; text-transform: capitalize;
-}
-.cat-btn:hover { background: #155e75; }
-.cat-btn.on { background: #67e8f9; color: #020617; }
-.catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
-.catalog .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: #1e293b; }
-.catalog .card { text-align: left; cursor: pointer; }
+pre { white-space: pre-wrap; font-size: 12px; overflow: auto; }
+.cats, .pick { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.cat-btn, .pick button { background: #0b3a4a; color: #ecfeff; border: 1px solid #22d3ee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-weight: bold; text-transform: capitalize; }
+.cat-btn.on, .pick button.on { background: #67e8f9; color: #020617; }
+.catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 16px; }
+.catalog .card { text-align: left; cursor: pointer; padding: 10px; }
 .catalog .card:hover { border-color: #67e8f9; }
+.catalog .card img, .art { width: 100%; height: 170px; object-fit: cover; border-radius: 8px; background: #0b3a4a; display: block; }
 .gene-row { border-top: 1px solid #1e293b; padding: 10px 0; }
-.ph { width: 100%; height: 160px; border-radius: 8px; background: #1e293b; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; }
 </style>
 </head>
 <body>
-
 <div class="research-nav">
   <button class="active" data-view="portfolio" type="button">Learning Portfolio</button>
   <button data-view="dash" data-mod="species" type="button">Species</button>
@@ -107,7 +59,6 @@ pre { white-space: pre-wrap; font-size: 13px; }
   <button data-view="dash" data-mod="bio" type="button">Bioinformatics</button>
   <button data-view="dash" data-mod="workflows" type="button">Workflows</button>
 </div>
-
 <div id="portfolio">
 <div class="container">
   <div class="top-logos">
@@ -119,24 +70,12 @@ pre { white-space: pre-wrap; font-size: 13px; }
   <p><strong>Path to Becoming a Geneticist | Genome Engineering & CRISPR-Cas9</strong></p>
   <div class="profile">
     <img src="profile.jpg" alt="Mark Gonzalez">
-    <p>
-      UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology.
-      Long-term objective: specialization in genome editing, CRISPR-Cas9 systems, and applied genetic research.
-    </p>
+    <p>UTRGV student currently completing Biology I and Chemistry II, building foundational knowledge in genetics and molecular biology. Long-term objective: specialization in genome editing, CRISPR-Cas9 systems, and applied genetic research.</p>
   </div>
   <h2>🧬 Academic Focus</h2>
-  <ul>
-    <li>Genetics Foundations</li>
-    <li>Molecular Biology</li>
-    <li>DNA Repair Mechanisms</li>
-    <li>Genome Engineering</li>
-    <li>CRISPR-Cas9 Systems</li>
-  </ul>
+  <ul><li>Genetics Foundations</li><li>Molecular Biology</li><li>DNA Repair Mechanisms</li><li>Genome Engineering</li><li>CRISPR-Cas9 Systems</li></ul>
   <h2>🔬 CRISPR-Cas9 Overview</h2>
-  <p>
-    CRISPR-Cas9 enables precise genome editing by using guide RNA to direct the Cas9 enzyme to a specific DNA sequence, where it introduces a double-strand break.
-    Repair occurs through NHEJ (gene disruption) or HDR (precise correction).
-  </p>
+  <p>CRISPR-Cas9 enables precise genome editing by using guide RNA to direct the Cas9 enzyme to a specific DNA sequence, where it introduces a double-strand break. Repair occurs through NHEJ (gene disruption) or HDR (precise correction).</p>
   <h2>🧰 CRISPR-Cas9 Tools & Instruments</h2>
   <img class="tools-image" src="crisper-tools.png" alt="CRISPR-Cas9 tools and instruments diagram">
   <p class="caption">Diagram of common instruments and components used in CRISPR-Cas9 workflows.</p>
@@ -193,21 +132,21 @@ pre { white-space: pre-wrap; font-size: 13px; }
   <p>LinkedIn: <a href="https://www.linkedin.com/in/mark-gonzalez-858167266" target="_blank" rel="noopener">linkedin.com/in/mark-gonzalez-858167266</a></p>
 </div>
 </div>
-
 <div id="dash" class="dash">
   <div class="wrap">
     <section data-mod="species">
       <h1>Species catalog</h1>
-      <p class="muted">Select human, animal, plant, bacteria, virus, fungi, mold, parasite, amoeba, or archaea. Cards show image, name, where found, then NCBI genes and annotation abilities.</p>
+      <p class="muted">GBIF photos when available; otherwise an educational drawing. Click a card for NCBI genes.</p>
       <div id="spCats" class="cats"></div>
-      <p id="spErr" class="err"></p>
       <div id="spOut" class="catalog"></div>
       <div id="genePanel"></div>
     </section>
     <section data-mod="genes" hidden>
       <h1>Gene search</h1>
-      <input id="gQ" value="TP53" placeholder="Gene symbol">
-      <input id="gSp" value="Homo sapiens" placeholder="Species">
+      <p class="muted">Select a species, then search a gene symbol.</p>
+      <div id="genePicks" class="pick"></div>
+      <p class="muted">Selected species: <b id="geneSpLabel">Homo sapiens</b></p>
+      <input id="gQ" value="TP53" placeholder="Gene symbol, e.g. TP53">
       <button class="go" type="button" onclick="searchGenes()">Search genes</button>
       <p id="gErr" class="err"></p>
       <div id="gOut"></div>
@@ -221,64 +160,72 @@ pre { white-space: pre-wrap; font-size: 13px; }
     </section>
     <section data-mod="bio" hidden>
       <h1>Bioinformatics</h1>
-      <p class="note">This page does not generate PCR primer sequences. Use NCBI Primer-BLAST in an approved class if needed.</p>
-      <input id="bioQ" placeholder="Search a published gene name, e.g. TP53">
-      <input id="bioSp" value="Homo sapiens" placeholder="Species">
-      <button class="go" type="button" onclick="bioSearch()">Search gene record</button>
+      <p class="note">Shows published gene location and NCBI sequence when available. Does not generate PCR primer oligos. Use Primer-BLAST in an approved class.</p>
+      <div id="bioPicks" class="pick"></div>
+      <p class="muted">Selected species: <b id="bioSpLabel">Homo sapiens</b></p>
+      <input id="bioQ" placeholder="Gene name, e.g. TP53" value="TP53">
+      <button class="go" type="button" onclick="bioSearch()">Show gene locus / sequence</button>
       <p id="bioErr" class="err"></p>
       <div id="bioOut"></div>
-      <textarea id="fa" rows="4" placeholder="Paste a FASTA you copied from NCBI"></textarea>
-      <button class="go" type="button" onclick="viewSeq()">View pasted sequence</button>
-      <pre id="faOut"></pre>
-      <p><a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">NCBI Primer-BLAST</a></p>
     </section>
     <section data-mod="workflows" hidden>
       <h1>Computational workflow</h1>
-      <p class="note">No CRISPR lab steps, DNA extraction, PCR, or freezing protocols are provided here.</p>
+      <p class="note">No CRISPR lab steps, DNA extraction, PCR, or freezing protocols.</p>
       <input id="wSp" value="Homo sapiens">
       <input id="wGene" value="TP53">
-      <input id="wObj" value="Map public identifiers and published functions">
       <button class="go" type="button" onclick="makePlan()">Generate computational plan</button>
       <pre id="wOut"></pre>
     </section>
   </div>
 </div>
-
 <script>
 const EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
 const NAV = document.querySelectorAll(".research-nav button");
-const KEYS = ["regeneration","bioluminescence","dna repair","heat","cold","radiation","longevity","immune","photosynth","pigment","metabol","opsin","olfactory","repair","kinase","transcription"];
+const KEYS = ["regeneration","bioluminescence","dna repair","heat","cold","radiation","longevity","immune","photosynth","pigment","metabol","opsin","repair","kinase","transcription"];
 const GROUPS = [
   { id: "human", label: "human", examples: ["Homo sapiens"] },
-  { id: "animal", label: "animal", examples: ["Mus musculus","Danio rerio","Drosophila melanogaster","Caenorhabditis elegans","Gallus gallus","Bos taurus","Canis lupus familiaris","Felis catus"] },
-  { id: "plant", label: "plant", examples: ["Arabidopsis thaliana","Oryza sativa","Zea mays","Solanum lycopersicum","Glycine max","Triticum aestivum"] },
-  { id: "bacteria", label: "bacteria", examples: ["Escherichia coli","Bacillus subtilis","Staphylococcus aureus","Pseudomonas aeruginosa","Mycobacterium tuberculosis"] },
-  { id: "virus", label: "virus", examples: ["Influenza A virus","Severe acute respiratory syndrome coronavirus 2","Human immunodeficiency virus 1","Tobacco mosaic virus"] },
-  { id: "fungi", label: "fungi", examples: ["Saccharomyces cerevisiae","Neurospora crassa","Schizosaccharomyces pombe","Candida albicans","Cryptococcus neoformans"] },
-  { id: "mold", label: "mold", examples: ["Aspergillus niger","Aspergillus nidulans","Penicillium chrysogenum","Rhizopus stolonifer"] },
-  { id: "parasite", label: "parasite", examples: ["Plasmodium falciparum","Trypanosoma brucei","Schistosoma mansoni","Giardia intestinalis","Toxoplasma gondii"] },
-  { id: "amoeba", label: "amoeba", examples: ["Entamoeba histolytica","Dictyostelium discoideum","Amoeba proteus","Acanthamoeba castellanii"] },
-  { id: "archaea", label: "archaea", examples: ["Methanocaldococcus jannaschii","Haloferax volcanii","Sulfolobus acidocaldarius","Pyrococcus furiosus"] }
+  { id: "animal", label: "animal", examples: ["Mus musculus","Danio rerio","Drosophila melanogaster","Caenorhabditis elegans","Gallus gallus","Bos taurus","Canis lupus familiaris","Felis catus","Pan troglodytes","Equus caballus","Sus scrofa","Ovis aries","Xenopus tropicalis","Apis mellifera","Octopus vulgaris"] },
+  { id: "plant", label: "plant", examples: ["Arabidopsis thaliana","Oryza sativa","Zea mays","Solanum lycopersicum","Glycine max","Triticum aestivum","Nicotiana tabacum","Vitis vinifera","Hordeum vulgare","Populus trichocarpa","Medicago truncatula","Physcomitrium patens"] },
+  { id: "bacteria", label: "bacteria", examples: ["Escherichia coli","Bacillus subtilis","Staphylococcus aureus","Pseudomonas aeruginosa","Mycobacterium tuberculosis","Salmonella enterica","Streptococcus pneumoniae","Helicobacter pylori","Vibrio cholerae","Streptomyces coelicolor","Caulobacter crescentus"] },
+  { id: "virus", label: "virus", examples: ["Influenza A virus","Severe acute respiratory syndrome coronavirus 2","Human immunodeficiency virus 1","Tobacco mosaic virus","Measles morbillivirus","Hepatitis B virus","Dengue virus","Escherichia virus T4"] },
+  { id: "fungi", label: "fungi", examples: ["Saccharomyces cerevisiae","Neurospora crassa","Schizosaccharomyces pombe","Candida albicans","Cryptococcus neoformans","Aspergillus fumigatus","Ustilago maydis","Coprinopsis cinerea"] },
+  { id: "mold", label: "mold", examples: ["Aspergillus niger","Aspergillus nidulans","Penicillium chrysogenum","Rhizopus stolonifer","Mucor circinelloides","Fusarium oxysporum","Trichoderma reesei","Botrytis cinerea"] },
+  { id: "parasite", label: "parasite", examples: ["Plasmodium falciparum","Trypanosoma brucei","Schistosoma mansoni","Giardia intestinalis","Toxoplasma gondii","Leishmania major","Brugia malayi","Trichinella spiralis"] },
+  { id: "amoeba", label: "amoeba", examples: ["Entamoeba histolytica","Dictyostelium discoideum","Amoeba proteus","Acanthamoeba castellanii","Dictyostelium purpureum","Polysphondylium pallidum"] },
+  { id: "archaea", label: "archaea", examples: ["Methanocaldococcus jannaschii","Haloferax volcanii","Sulfolobus acidocaldarius","Pyrococcus furiosus","Thermococcus kodakarensis","Archaeoglobus fulgidus","Nanoarchaeum equitans","Methanosarcina mazei"] }
 ];
 let currentGroup = "human";
 let geneRetstart = 0;
-
-function renderCats() {
-  document.getElementById("spCats").innerHTML = GROUPS.map(g =>
-    `<button type="button" class="cat-btn${g.id === currentGroup ? " on" : ""}" onclick="pickGroup('${g.id}')">${g.label}</button>`
-  ).join("");
+let selectedSpecies = "Homo sapiens";
+function art(group) {
+  if (group === "human") return `<svg class="art" viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="170" fill="#0b3a4a"/><ellipse cx="100" cy="28" rx="14" ry="16" fill="#fde68a" stroke="#67e8f9"/><rect x="88" y="44" width="24" height="40" rx="6" fill="#fde68a"/><path d="M88 50 L62 78" stroke="#67e8f9" stroke-width="6" fill="none"/><path d="M112 50 L138 78" stroke="#67e8f9" stroke-width="6" fill="none"/><path d="M92 84 L78 130" stroke="#fde68a" stroke-width="7" fill="none"/><path d="M108 84 L122 130" stroke="#fde68a" stroke-width="7" fill="none"/><circle cx="100" cy="62" r="7" fill="#22d3ee"/><text x="100" y="158" text-anchor="middle" fill="#a5f3fc" font-size="11">human anatomy sketch</text></svg>`;
+  if (group === "animal") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><ellipse cx="110" cy="90" rx="50" ry="28" fill="#67e8f9"/><circle cx="155" cy="78" r="16" fill="#5eead4"/><circle cx="161" cy="74" r="3" fill="#022c22"/><rect x="70" y="110" width="8" height="28" fill="#22d3ee"/><rect x="95" y="110" width="8" height="28" fill="#22d3ee"/><rect x="120" y="110" width="8" height="28" fill="#22d3ee"/><rect x="140" y="110" width="8" height="28" fill="#22d3ee"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">animal sketch</text></svg>`;
+  if (group === "plant") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><rect x="96" y="70" width="8" height="70" fill="#34d399"/><ellipse cx="80" cy="80" rx="22" ry="12" fill="#6ee7b7"/><ellipse cx="120" cy="70" rx="22" ry="12" fill="#6ee7b7"/><circle cx="100" cy="52" r="14" fill="#fbbf24"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">plant sketch</text></svg>`;
+  if (group === "bacteria") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><ellipse cx="100" cy="85" rx="55" ry="28" fill="#22d3ee"/><circle cx="80" cy="85" r="6" fill="#ecfeff"/><circle cx="110" cy="78" r="5" fill="#ecfeff"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">bacterium sketch</text></svg>`;
+  if (group === "virus") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><circle cx="100" cy="85" r="28" fill="#67e8f9"/><g stroke="#a5f3fc" stroke-width="4"><line x1="100" y1="40" x2="100" y2="57"/><line x1="100" y1="113" x2="100" y2="130"/><line x1="55" y1="85" x2="72" y2="85"/><line x1="128" y1="85" x2="145" y2="85"/></g><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">virus sketch</text></svg>`;
+  if (group === "fungi") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><path d="M60 90 Q100 30 140 90 Z" fill="#fde68a"/><rect x="92" y="90" width="16" height="40" fill="#fbbf24"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">fungus sketch</text></svg>`;
+  if (group === "mold") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><path d="M40 130 C70 60 130 60 160 130" stroke="#86efac" stroke-width="4" fill="none"/><circle cx="70" cy="70" r="6" fill="#4ade80"/><circle cx="100" cy="55" r="7" fill="#4ade80"/><circle cx="130" cy="72" r="6" fill="#4ade80"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">mold sketch</text></svg>`;
+  if (group === "parasite") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><ellipse cx="100" cy="90" rx="60" ry="18" fill="#fca5a5"/><circle cx="155" cy="90" r="10" fill="#fecaca"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">parasite sketch</text></svg>`;
+  if (group === "amoeba") return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><path d="M70 90 C60 50 150 40 140 90 C160 130 50 140 70 90" fill="#99f6e4"/><circle cx="100" cy="90" r="10" fill="#134e4a"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">amoeba sketch</text></svg>`;
+  return `<svg class="art" viewBox="0 0 200 170"><rect width="200" height="170" fill="#0b3a4a"/><rect x="55" y="55" width="90" height="50" rx="20" fill="#67e8f9"/><text x="100" y="160" text-anchor="middle" fill="#a5f3fc" font-size="11">archaea sketch</text></svg>`;
 }
+function allSpecies() { const list = []; GROUPS.forEach(g => g.examples.forEach(n => list.push({ group: g.id, name: n }))); return list; }
+function renderCats() { document.getElementById("spCats").innerHTML = GROUPS.map(g => `<button type="button" class="cat-btn${g.id === currentGroup ? " on" : ""}" onclick="pickGroup('${g.id}')">${g.label}</button>`).join(""); }
+function renderSpeciesPicks() {
+  const html = allSpecies().map(s => `<button type="button" class="${s.name === selectedSpecies ? "on" : ""}" onclick="chooseSpecies('${s.name.replace(/'/g, "")}')">${s.name}</button>`).join("");
+  document.getElementById("genePicks").innerHTML = html;
+  document.getElementById("bioPicks").innerHTML = html;
+  document.getElementById("geneSpLabel").textContent = selectedSpecies;
+  document.getElementById("bioSpLabel").textContent = selectedSpecies;
+}
+function chooseSpecies(name) { selectedSpecies = name; renderSpeciesPicks(); }
 NAV.forEach(b => b.addEventListener("click", () => {
   NAV.forEach(x => x.classList.remove("active"));
   b.classList.add("active");
   const view = b.dataset.view;
   document.getElementById("portfolio").style.display = view === "portfolio" ? "block" : "none";
   document.getElementById("dash").classList.toggle("on", view === "dash");
-  if (view === "dash") {
-    document.querySelectorAll("#dash section").forEach(s => {
-      s.hidden = s.getAttribute("data-mod") !== b.dataset.mod;
-    });
-  }
+  if (view === "dash") document.querySelectorAll("#dash section").forEach(s => { s.hidden = s.getAttribute("data-mod") !== b.dataset.mod; });
 }));
 async function ncbiSearch(db, term, retmax, retstart) {
   const s = await fetch(`${EUTILS}/esearch.fcgi?db=${db}&term=${encodeURIComponent(term)}&retmax=${retmax || 12}&retstart=${retstart || 0}&retmode=json`).then(r => r.json());
@@ -293,16 +240,9 @@ function abilitiesFrom(text) {
   if (!hits.length) return { ability: "unavailable from this annotation", evidence: "unknown" };
   return { ability: hits.join(", "), evidence: "predicted (keyword match on published text)" };
 }
-function pickGroup(id) {
-  currentGroup = id;
-  geneRetstart = 0;
-  document.getElementById("genePanel").innerHTML = "";
-  renderCats();
-  loadCatalog();
-}
+function pickGroup(id) { currentGroup = id; geneRetstart = 0; document.getElementById("genePanel").innerHTML = ""; renderCats(); loadCatalog(); }
 async function loadCatalog() {
   const out = document.getElementById("spOut");
-  document.getElementById("spErr").textContent = "";
   out.innerHTML = "Loading catalog…";
   const group = GROUPS.find(x => x.id === currentGroup);
   const cards = [];
@@ -324,18 +264,15 @@ async function loadCatalog() {
           if (countries.length) where = countries.slice(0, 6).join(", ");
         }
       } catch (e) {}
-      const photo = img ? `<img src="${img}" alt="${sci}">` : `<div class="ph">specimen image unavailable</div>`;
-      cards.push(`<button type="button" class="card" onclick="openSpecies('${id || ""}','${sci.replace(/'/g, "")}')">${photo}<h3>${sci}</h3><p class="muted">${it.commonname || "common name unavailable"}</p><p><b>Where found:</b> ${where}</p><p class="muted">click for documented genes</p></button>`);
+      const pic = img ? `<img src="${img}" alt="${sci}">` : art(group.id);
+      cards.push(`<button type="button" class="card" onclick="openSpecies('${id || ""}','${sci.replace(/'/g, "")}')">${pic}<h3>${sci}</h3><p class="muted">${it.commonname || "common name unavailable"}</p><p><b>Where found:</b> ${where}</p><p class="muted">click for documented genes</p></button>`);
     } catch (e) {
-      cards.push(`<div class="card"><h3>${name}</h3><p class="muted">NCBI record unavailable</p></div>`);
+      cards.push(`<div class="card">${art(group.id)}<h3>${name}</h3><p class="muted">NCBI record unavailable</p></div>`);
     }
   }
   out.innerHTML = cards.join("");
 }
-async function openSpecies(taxid, sci) {
-  geneRetstart = 0;
-  await loadGenesFor(sci, taxid, false);
-}
+async function openSpecies(taxid, sci) { geneRetstart = 0; selectedSpecies = sci; renderSpeciesPicks(); await loadGenesFor(sci, taxid, false); }
 async function loadGenesFor(sci, taxid, append) {
   const panel = document.getElementById("genePanel");
   if (!append) panel.innerHTML = `<div class="card"><h2>Documented genes for ${sci}</h2><div id="geneList">Loading genes…</div></div>`;
@@ -350,7 +287,7 @@ async function loadGenesFor(sci, taxid, append) {
       const summary = it.summary || "function summary unavailable";
       const ab = abilitiesFrom(summary);
       const loc = (it.chromosome && String(it.chromosome)) || it.maplocation || "location unavailable";
-      html += `<div class="gene-row"><b>${it.name || "symbol unavailable"}</b> — ${it.description || ""}<br><span class="muted">GeneID ${id} · where: ${loc}</span><br>Ability: ${ab.ability} · ${ab.evidence}<br><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a></div>`;
+      html += `<div class="gene-row"><b>${it.name || "symbol unavailable"}</b> — ${it.description || ""}<br><span class="muted">GeneID ${id} · genome location: ${loc}</span><br>Ability: ${ab.ability} · ${ab.evidence}<br><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a></div>`;
     }
     if (append) box.innerHTML += html;
     else box.innerHTML = `<p class="muted">NCBI reports ${count} gene records. Showing a page at a time.</p>` + html;
@@ -362,9 +299,7 @@ async function loadGenesFor(sci, taxid, append) {
       more.onclick = () => loadGenesFor(sci, taxid, true);
       box.appendChild(more);
     }
-  } catch (e) {
-    document.getElementById("geneList").innerHTML = "NCBI Gene request failed.";
-  }
+  } catch (e) { document.getElementById("geneList").innerHTML = "NCBI Gene request failed."; }
 }
 async function searchGenes() {
   const out = document.getElementById("gOut");
@@ -372,35 +307,47 @@ async function searchGenes() {
   out.innerHTML = "Searching…";
   try {
     const gene = document.getElementById("gQ").value.trim();
-    const sp = document.getElementById("gSp").value.trim();
-    const { ids, result } = await ncbiSearch("gene", sp ? gene + " AND " + sp + "[Organism]" : gene, 10, 0);
-    if (!ids.length) { out.innerHTML = "No NCBI Gene hits."; return; }
+    const { ids, result } = await ncbiSearch("gene", gene + " AND " + selectedSpecies + "[Organism]", 10, 0);
+    if (!ids.length) { out.innerHTML = "No NCBI Gene hits for this species."; return; }
     out.innerHTML = ids.map(id => {
       const it = result[id] || {};
       const ab = abilitiesFrom(it.summary);
-      return `<div class="card"><h3>${it.name || gene}</h3><p>${it.summary || "summary unavailable"}</p><p>Ability: ${ab.ability}</p><p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a></p></div>`;
+      return `<div class="card"><h3>${it.name || gene}</h3><p>${selectedSpecies}</p><p>${it.summary || "summary unavailable"}</p><p>Ability: ${ab.ability}</p><p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a></p></div>`;
     }).join("");
   } catch (e) { document.getElementById("gErr").textContent = "NCBI Gene request failed."; }
 }
 async function bioSearch() {
-  document.getElementById("gQ").value = document.getElementById("bioQ").value;
-  document.getElementById("gSp").value = document.getElementById("bioSp").value;
-  await searchGenes();
-  document.getElementById("bioOut").innerHTML = document.getElementById("gOut").innerHTML;
+  const err = document.getElementById("bioErr");
+  const out = document.getElementById("bioOut");
+  err.textContent = "";
+  out.innerHTML = "Loading published gene locus…";
+  const gene = document.getElementById("bioQ").value.trim();
+  try {
+    const { ids, result } = await ncbiSearch("gene", gene + " AND " + selectedSpecies + "[Organism]", 5, 0);
+    if (!ids.length) { out.innerHTML = "No NCBI Gene record for that name in the selected species."; return; }
+    const id = ids[0];
+    const it = result[id] || {};
+    const gi = (it.genomicinfo && it.genomicinfo[0]) || {};
+    const acc = gi.chraccver || "";
+    const start = gi.chrstart;
+    const stop = gi.chrstop;
+    let seqBlock = "NCBI sequence unavailable for this id.";
+    if (acc && start && stop) {
+      const a = Math.min(start, stop);
+      const b = Math.max(start, stop);
+      const end = Math.min(b, a + 400);
+      try {
+        const fasta = await fetch(`${EUTILS}/efetch.fcgi?db=nuccore&id=${encodeURIComponent(acc)}&seq_start=${a}&seq_stop=${end}&rettype=fasta&retmode=text`).then(r => r.text());
+        if (fasta && fasta[0] === ">") seqBlock = fasta + "\n(Preview of the published locus only; not a primer.)";
+      } catch (e) {}
+    }
+    out.innerHTML = `<div class="card"><h3>${it.name || gene} · ${selectedSpecies}</h3><p>GeneID ${id}</p><p>Genome location: ${acc || "unavailable"} ${start || ""}–${stop || ""}</p><p>${it.summary || "summary unavailable"}</p><pre>${seqBlock}</pre><p class="note">Left and right PCR primers are not generated here. Use NCBI Primer-BLAST with your instructor if primers are required.</p><p><a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">NCBI Gene</a> · <a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">NCBI Primer-BLAST</a></p></div>`;
+  } catch (e) { err.textContent = "NCBI request failed."; }
 }
-function assist() {
-  document.getElementById("aOut").textContent = "This assistant will not create new genes or engineered abilities.\n\nUse NCBI Gene, UniProt, and PubMed. Label claims CONFIRMED SCIENCE, COMPUTATIONAL PREDICTION, or SPECULATIVE HYPOTHESIS.";
-}
-function viewSeq() {
-  const seq = fa.value.trim().replace(/^>.*$/m, "").replace(/\s+/g, "").toUpperCase();
-  if (!seq) { faOut.textContent = "No sequence pasted."; return; }
-  if (!/^[ACGTUNRYSWKMBDHV.-]+$/.test(seq)) { faOut.textContent = "Not valid nucleic acid characters."; return; }
-  faOut.textContent = "Length: " + seq.length + "\nPreview: " + seq.slice(0, 400);
-}
-function makePlan() {
-  wOut.textContent = "Computational plan only. No CRISPR lab steps, extraction, PCR, gels, or freezing protocols.\n\n1. Confirm NCBI taxid\n2. Record GeneID\n3. Cite UniProt/PubMed\n4. Paste a public FASTA if one exists";
-}
+function assist() { document.getElementById("aOut").textContent = "This assistant will not create new genes or engineered abilities.\nUse NCBI Gene, UniProt, and PubMed."; }
+function makePlan() { wOut.textContent = "Computational plan only. No CRISPR lab steps, extraction, PCR, gels, or freezing."; }
 renderCats();
+renderSpeciesPicks();
 loadCatalog();
 </script>
 </body>
