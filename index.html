@@ -85,6 +85,13 @@ a:hover { text-decoration: underline; }
 .err { color: #fca5a5; }
 pre { white-space: pre-wrap; font-size: 13px; }
 img.hit { max-width: 280px; border-radius: 8px; }
+.cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 14px 0; }
+.cat-btn {
+  background: #0b3a4a; color: #ecfeff; border: 1px solid #22d3ee; border-radius: 10px;
+  padding: 14px 10px; cursor: pointer; font-weight: bold; text-transform: capitalize;
+}
+.cat-btn:hover { background: #155e75; }
+.cat-btn.on { background: #67e8f9; color: #020617; }
 </style>
 </head>
 <body>
@@ -207,6 +214,8 @@ img.hit { max-width: 280px; border-radius: 8px; }
     <section data-mod="home">
       <h1>Research dashboard</h1>
       <p class="muted">Live lookups use NCBI, GBIF, Ensembl, and UniProt. Missing records are labeled unavailable. Nothing is invented. Notes are stored in this browser only.</p>
+      <h2>All species map</h2>
+      <div id="homeCats" class="cats"></div>
       <div class="grid" style="margin-top:16px">
         <div class="card"><b>1. Species Explorer</b><p class="muted">NCBI Taxonomy + GBIF</p></div>
         <div class="card"><b>2. Genes & Abilities</b><p class="muted">NCBI Gene + UniProt</p></div>
@@ -220,20 +229,9 @@ img.hit { max-width: 280px; border-radius: 8px; }
 
     <section data-mod="species" hidden>
       <h1>Species Explorer</h1>
-      <p class="muted">Categories search NCBI Taxonomy. Images/localities come from GBIF when a match exists.</p>
-      <select id="cat">
-        <option value="Homo sapiens[Scientific Name]">Humans</option>
-        <option value="Metazoa[Subtree] AND species[Rank]" selected>Animals</option>
-        <option value="Viridiplantae[Subtree] AND species[Rank]">Plants</option>
-        <option value="Bacteria[Subtree] AND species[Rank]">Bacteria</option>
-        <option value="Viruses[Subtree] AND species[Rank]">Viruses</option>
-        <option value="Fungi[Subtree] AND species[Rank]">Fungi</option>
-        <option value="(mold OR Eurotiales) AND species[Rank]">Molds</option>
-        <option value="(parasite OR parasitic) AND species[Rank]">Parasites</option>
-        <option value="Amoebozoa[Subtree] AND species[Rank]">Amoebas</option>
-        <option value="Archaea[Subtree] AND species[Rank]">Archaea</option>
-      </select>
-      <input id="spQ" placeholder="Optional name, e.g. Danio rerio">
+      <p class="muted">Choose a group, then search NCBI Taxonomy. Click a species for taxonomy, genome links, and GBIF images when available. Parasite is a lifestyle, not a kingdom, so that list uses well-known parasitic species from NCBI.</p>
+      <div id="spCats" class="cats"></div>
+      <input id="spQ" placeholder="Search a name inside this group, e.g. Danio rerio">
       <button class="go" type="button" onclick="searchSpecies()">Search NCBI</button>
       <p id="spErr" class="err"></p>
       <div id="spOut"></div>
@@ -325,6 +323,43 @@ ATGCGTACGTAGCTAGCTAGCTAG</textarea>
 const EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
 const NAV = document.querySelectorAll(".research-nav button");
 const KEYS = ["regeneration","bioluminescence","dna repair","heat","cold","radiation","longevity","immune","photosynth","pigment","metabol","opsin","olfactory"];
+const GROUPS = [
+  { id: "human", label: "human", filter: "Homo sapiens[Scientific Name]", examples: ["Homo sapiens"] },
+  { id: "animal", label: "animal", filter: "Metazoa[Subtree]", examples: ["Mus musculus","Danio rerio","Drosophila melanogaster","Caenorhabditis elegans","Gallus gallus","Bos taurus","Canis lupus familiaris","Felis catus"] },
+  { id: "plant", label: "plant", filter: "Viridiplantae[Subtree]", examples: ["Arabidopsis thaliana","Oryza sativa","Zea mays","Solanum lycopersicum","Glycine max","Triticum aestivum"] },
+  { id: "bacteria", label: "bacteria", filter: "Bacteria[Subtree]", examples: ["Escherichia coli","Bacillus subtilis","Staphylococcus aureus","Pseudomonas aeruginosa","Mycobacterium tuberculosis"] },
+  { id: "virus", label: "virus", filter: "Viruses[Subtree]", examples: ["Influenza A virus","Severe acute respiratory syndrome coronavirus 2","Human immunodeficiency virus 1","Tobacco mosaic virus","Bacteriophage lambda"] },
+  { id: "fungi", label: "fungi", filter: "Fungi[Subtree]", examples: ["Saccharomyces cerevisiae","Neurospora crassa","Schizosaccharomyces pombe","Candida albicans","Cryptococcus neoformans"] },
+  { id: "mold", label: "mold", filter: "(Eurotiales[Subtree] OR Mucorales[Subtree] OR Aspergillus OR Penicillium OR Rhizopus)", examples: ["Aspergillus niger","Aspergillus nidulans","Penicillium chrysogenum","Rhizopus stolonifer","Neurospora crassa"] },
+  { id: "parasite", label: "parasite", filter: "(Plasmodium OR Trypanosoma OR Schistosoma OR Giardia OR Leishmania OR Toxoplasma)", examples: ["Plasmodium falciparum","Trypanosoma brucei","Schistosoma mansoni","Giardia intestinalis","Toxoplasma gondii","Leishmania major"] },
+  { id: "amoeba", label: "amoeba", filter: "(Amoebozoa[Subtree] OR Entamoeba OR Amoeba proteus OR Dictyostelium)", examples: ["Entamoeba histolytica","Dictyostelium discoideum","Amoeba proteus","Acanthamoeba castellanii"] },
+  { id: "archaea", label: "archaea", filter: "Archaea[Subtree]", examples: ["Methanocaldococcus jannaschii","Haloferax volcanii","Sulfolobus acidocaldarius","Pyrococcus furiosus","Methanosarcina mazei"] }
+];
+let currentGroup = "animal";
+
+function renderCats() {
+  const html = GROUPS.map(g => `<button type="button" class="cat-btn${g.id === currentGroup ? " on" : ""}" onclick="pickGroup('${g.id}')">${g.label}</button>`).join("");
+  const home = document.getElementById("homeCats");
+  const sp = document.getElementById("spCats");
+  if (home) home.innerHTML = html;
+  if (sp) sp.innerHTML = html;
+}
+function openDash(mod) {
+  document.querySelectorAll(".research-nav button").forEach(x => {
+    x.classList.toggle("active", x.dataset.view === "dash" && x.dataset.mod === mod);
+  });
+  document.getElementById("portfolio").style.display = "none";
+  document.getElementById("dash").classList.add("on");
+  document.querySelectorAll("#dash section").forEach(s => {
+    s.hidden = s.getAttribute("data-mod") !== mod;
+  });
+}
+function pickGroup(id) {
+  currentGroup = id;
+  renderCats();
+  openDash("species");
+  searchSpecies();
+}
 
 NAV.forEach(b => b.addEventListener("click", () => {
   NAV.forEach(x => x.classList.remove("active"));
@@ -340,7 +375,7 @@ NAV.forEach(b => b.addEventListener("click", () => {
 }));
 
 async function ncbiSearch(db, term) {
-  const s = await fetch(`${EUTILS}/esearch.fcgi?db=${db}&term=${encodeURIComponent(term)}&retmax=8&retmode=json`).then(r => r.json());
+  const s = await fetch(`${EUTILS}/esearch.fcgi?db=${db}&term=${encodeURIComponent(term)}&retmax=12&retmode=json`).then(r => r.json());
   const ids = (s.esearchresult && s.esearchresult.idlist) || [];
   if (!ids.length) return { ids: [], result: {} };
   const sum = await fetch(`${EUTILS}/esummary.fcgi?db=${db}&id=${ids.join(",")}&retmode=json`).then(r => r.json());
@@ -353,8 +388,10 @@ async function searchSpecies() {
   err.textContent = ""; out.innerHTML = "Searching…";
   try {
     const q = document.getElementById("spQ").value.trim();
-    const cat = document.getElementById("cat").value;
-    const term = q ? `(${q}) AND (${cat})` : cat;
+    const g = GROUPS.find(x => x.id === currentGroup) || GROUPS[1];
+    const term = q
+      ? `(${q}) AND (${g.filter})`
+      : g.examples.map(n => `${n}[Scientific Name]`).join(" OR ");
     const { ids, result } = await ncbiSearch("taxonomy", term);
     if (!ids.length) { out.innerHTML = "No NCBI Taxonomy hits (unavailable)."; return; }
     const cards = [];
@@ -485,6 +522,7 @@ Expected outputs: identifier table, sequence availability, literature list, expl
 Limitations: public databases are incomplete; keyword abilities are not experimental proof
 Checklist: taxid, gene IDs or missing, evidence labeled, no invented sequences, lab work routed to approved protocols`;
 }
+renderCats();
 renderInterests();
 renderNotes();
 </script>
