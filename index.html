@@ -60,7 +60,6 @@ body { margin:0; font-family: Segoe UI, Arial, Helvetica, sans-serif; background
 .badge.plan { background:#1e3a5f; color:#93c5fd; }
 .badge.need { background:#3b0764; color:#e9d5ff; }
 pre { white-space:pre-wrap; overflow:auto; font-size:12px; background:#020617; padding:10px; border-radius:8px; }
-.oligo { font-family: Consolas, "Courier New", monospace; color:#a5f3fc; letter-spacing:.03em; word-break:break-all; }
 .cats { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
 .cat { background:#0b3a4a; color:#ecfeff; border:1px solid #22d3ee; border-radius:10px; padding:8px 12px; cursor:pointer; font-weight:700; }
 .cat.on { background:var(--cyan); color:#04101f; }
@@ -212,19 +211,6 @@ const CATS=[
   {id:"bacteria",label:"Bacteria",q:"Bacteria[Subtree]"},
   {id:"virus",label:"Virus",q:"Viruses[Subtree]"}
 ];
-const SPECIES=[
-  ["human","Homo sapiens"],
-  ["animal","Mus musculus"],["animal","Danio rerio"],["animal","Drosophila melanogaster"],["animal","Caenorhabditis elegans"],["animal","Gallus gallus"],["animal","Bos taurus"],["animal","Canis lupus familiaris"],["animal","Felis catus"],["animal","Pan troglodytes"],["animal","Equus caballus"],["animal","Sus scrofa"],["animal","Ovis aries"],["animal","Xenopus tropicalis"],["animal","Apis mellifera"],["animal","Octopus vulgaris"],
-  ["plant","Arabidopsis thaliana"],["plant","Oryza sativa"],["plant","Zea mays"],["plant","Solanum lycopersicum"],["plant","Glycine max"],["plant","Triticum aestivum"],["plant","Nicotiana tabacum"],["plant","Vitis vinifera"],["plant","Hordeum vulgare"],["plant","Populus trichocarpa"],["plant","Medicago truncatula"],["plant","Physcomitrium patens"],
-  ["bacteria","Escherichia coli"],["bacteria","Bacillus subtilis"],["bacteria","Staphylococcus aureus"],["bacteria","Pseudomonas aeruginosa"],["bacteria","Mycobacterium tuberculosis"],["bacteria","Salmonella enterica"],["bacteria","Streptococcus pneumoniae"],["bacteria","Helicobacter pylori"],["bacteria","Vibrio cholerae"],["bacteria","Streptomyces coelicolor"],["bacteria","Caulobacter crescentus"],
-  ["virus","Influenza A virus"],["virus","Severe acute respiratory syndrome coronavirus 2"],["virus","Human immunodeficiency virus 1"],["virus","Tobacco mosaic virus"],["virus","Measles morbillivirus"],["virus","Hepatitis B virus"],["virus","Dengue virus"],["virus","Escherichia virus T4"],
-  ["fungi","Saccharomyces cerevisiae"],["fungi","Neurospora crassa"],["fungi","Schizosaccharomyces pombe"],["fungi","Candida albicans"],["fungi","Cryptococcus neoformans"],["fungi","Aspergillus fumigatus"],["fungi","Ustilago maydis"],["fungi","Coprinopsis cinerea"],
-  ["mold","Aspergillus niger"],["mold","Aspergillus nidulans"],["mold","Penicillium chrysogenum"],["mold","Rhizopus stolonifer"],["mold","Mucor circinelloides"],["mold","Fusarium oxysporum"],["mold","Trichoderma reesei"],["mold","Botrytis cinerea"],
-  ["parasite","Plasmodium falciparum"],["parasite","Trypanosoma brucei"],["parasite","Schistosoma mansoni"],["parasite","Giardia intestinalis"],["parasite","Toxoplasma gondii"],["parasite","Leishmania major"],["parasite","Brugia malayi"],["parasite","Trichinella spiralis"],
-  ["amoeba","Entamoeba histolytica"],["amoeba","Dictyostelium discoideum"],["amoeba","Amoeba proteus"],["amoeba","Acanthamoeba castellanii"],["amoeba","Dictyostelium purpureum"],["amoeba","Polysphondylium pallidum"],
-  ["archaea","Methanocaldococcus jannaschii"],["archaea","Haloferax volcanii"],["archaea","Sulfolobus acidocaldarius"],["archaea","Pyrococcus furiosus"],["archaea","Thermococcus kodakarensis"],["archaea","Archaeoglobus fulgidus"],["archaea","Nanoarchaeum equitans"],["archaea","Methanosarcina mazei"]
-];
-let primerScanStop=false;
 const OWNED=["PCR workstation with UV and ozone features","Micropipettes","Microscope with laptop camera","Specimen collection containers","Sample labeling supplies","Label printer","Microcentrifuge tubes","Tube racks","Storage boxes","Mini refrigerator","Incubator","Agar powder","Reusable inoculation loops","Laboratory alcohol cleaning supplies","PCR consumables","Other molecular biology supplies"];
 const VERIFY=["PCR thermal cycler","Centrifuge","Gel electrophoresis equipment","DNA extraction kits"];
 const PLANNED=["Oxford Nanopore MinION sequencer","miniPCR bio educational CRISPR-Cas9 kit","Autoclave","Ventilated laboratory enclosure","TSA medium","SDA medium"];
@@ -475,127 +461,17 @@ function dlSeq(){
   const blob=new Blob([document.getElementById("fa").value||seqText],{type:"text/plain"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="sequence.fasta"; a.click();
 }
-function stopPrimerScan(){ primerScanStop=true; }
-function revcompDna(seq){
-  const map={A:"T",T:"A",G:"C",C:"G"};
-  return seq.split("").reverse().map(c=>map[c]||"N").join("");
-}
-function scoreOligo(p){
-  if(!/^[ACGT]{20}$/.test(p)) return null;
-  if(/([ACGT])\1{3,}/.test(p)) return null;
-  const gcCount=(p.match(/[GC]/g)||[]).length;
-  const gc=gcCount/20;
-  if(gc<0.4||gc>0.6) return null;
-  const tailGC=(p.slice(-5).match(/[GC]/g)||[]).length;
-  if(tailGC<1||tailGC>3||!/[GC]$/.test(p)) return null;
-  const tm=2*(20-gcCount)+4*gcCount;
-  if(tm<54||tm>66) return null;
-  if(p.slice(0,-4).includes(revcompDna(p.slice(-4)))) return null;
-  return {gc:Math.round(gc*1000)/10, tm};
-}
-function designPrimers(seq){
-  const L=20;
-  const s=(seq||"").toUpperCase();
-  if(s.length<120) return {ok:false, reason:"Published sequence window is shorter than 120 bp."};
-  const forwards=[], reverses=[];
-  const maxF=Math.min(s.length-100, 280);
-  for(let i=0;i+L<=maxF;i++){
-    const oligo=s.slice(i,i+L);
-    const meta=scoreOligo(oligo);
-    if(meta) forwards.push(Object.assign({seq:oligo, pos:i}, meta));
-  }
-  for(let j=80;j+L<=s.length;j++){
-    const oligo=revcompDna(s.slice(j,j+L));
-    const meta=scoreOligo(oligo);
-    if(meta) reverses.push(Object.assign({seq:oligo, pos:j}, meta));
-  }
-  const rank=p=>-Math.abs(p.tm-60)-Math.abs(p.gc-50);
-  forwards.sort((a,b)=>rank(b)-rank(a));
-  reverses.sort((a,b)=>rank(b)-rank(a));
-  let best=null;
-  forwards.slice(0,30).forEach(f=>{
-    reverses.slice(0,40).forEach(r=>{
-      const amp=r.pos+L-f.pos;
-      if(amp<100||amp>280||r.pos<f.pos+L) return;
-      const dtm=Math.abs(f.tm-r.tm);
-      if(dtm>4) return;
-      const score=rank(f)+rank(r)-dtm*2+(amp>=120&&amp<=220?3:0);
-      if(!best||score>best.score) best={f,r,amp,score};
-    });
-  });
-  if(!best) return {ok:false, reason:"No pair in this published window passed length, GC, Tm, 3' end, and repeat filters."};
-  return {ok:true, forward:best.f, reverse:best.r, amp:best.amp};
-}
-async function locusPrimers(species, gene){
-  const {ids,result}=await ncbi("gene", gene+"[sym] AND "+species+"[Organism]", 3, 0);
-  if(!ids.length) return {status:"missing", html:'<div class="card"><h3>'+esc(species)+'</h3><p>'+esc(gene)+'</p><p class="err">No NCBI Gene record for this symbol. No primer pair.</p></div>'};
-  const id=ids[0];
-  const it=result[id]||{};
-  const gi=(it.genomicinfo&&it.genomicinfo[0])||{};
-  const acc=gi.chraccver||"";
-  const start=Number(gi.chrstart), stop=Number(gi.chrstop);
-  const symbol=it.name||gene;
-  const link='<p><a href="https://www.ncbi.nlm.nih.gov/gene/'+esc(id)+'" target="_blank" rel="noopener">NCBI Gene</a> · <a href="https://www.ncbi.nlm.nih.gov/tools/primer-blast/" target="_blank" rel="noopener">NCBI Primer-BLAST</a></p>';
-  if(!acc||!start||!stop) return {status:"failed", html:'<div class="card"><h3>'+esc(species)+" — "+esc(symbol)+'</h3><p>GeneID '+esc(id)+'</p><p class="err">Genome coordinates unavailable, so no primer pair was designed.</p>'+link+"</div>"};
-  const a=Math.min(start,stop), b=Math.max(start,stop), end=Math.min(b, a+899);
-  const fasta=await getText(EUTILS+"/efetch.fcgi?db=nuccore&id="+encodeURIComponent(acc)+"&seq_start="+a+"&seq_stop="+end+"&rettype=fasta&retmode=text");
-  if(!fasta||fasta[0]!==">") return {status:"failed", html:'<div class="card"><h3>'+esc(species)+" — "+esc(symbol)+'</h3><p class="err">NCBI did not return a sequence window.</p>'+link+"</div>"};
-  const seq=fasta.split(/\r?\n/).slice(1).join("").replace(/\s+/g,"").toUpperCase();
-  const designed=designPrimers(seq);
-  if(!designed.ok) return {status:"failed", html:'<div class="card"><h3>'+esc(species)+" — "+esc(symbol)+'</h3><p>GeneID '+esc(id)+" · "+esc(acc)+" "+a+"–"+end+'</p><p class="err">'+esc(designed.reason)+"</p>"+link+"</div>"};
-  const f=designed.forward, r=designed.reverse, fPos=a+f.pos, rEnd=a+r.pos+19;
-  return {status:"ok", html:'<div class="card"><span class="badge owned">predicted pair</span><h3>'+esc(species)+" — "+esc(symbol)+"</h3><p>GeneID "+esc(id)+" · "+esc(acc)+" "+esc(start)+"–"+esc(stop)+'</p><p>Forward 5′–3′: <span class="oligo">'+esc(f.seq)+'</span></p><p class="muted">'+f.seq.length+" nt · GC "+f.gc+"% · estimated Tm "+f.tm+"°C (Wallace) · plus-strand start "+fPos+'</p><p>Reverse 5′–3′: <span class="oligo">'+esc(r.seq)+'</span></p><p class="muted">'+r.seq.length+" nt · GC "+r.gc+"% · estimated Tm "+r.tm+"°C (Wallace) · plus-strand amplicon end "+rEnd+"</p><p>Predicted amplicon: "+designed.amp+" bp on "+esc(acc)+":"+fPos+"–"+rEnd+'</p><p class="note">Computational candidate from the published locus. Not lab-validated. Confirm in Primer-BLAST before any class use.</p>'+link+"</div>"};
-}
-async function scanSpeciesPrimers(){
-  primerScanStop=false;
-  const gene=(document.getElementById("bioGene").value||"").trim();
-  const group=document.getElementById("bioGroup").value;
-  const st=document.getElementById("bioSt");
-  const out=document.getElementById("bioOut");
-  if(!gene){ st.innerHTML="<span class='err'>Enter a gene symbol.</span>"; return; }
-  const list=SPECIES.filter(s=>group==="all"||s[0]===group);
-  out.innerHTML="";
-  let ok=0, missing=0, failed=0;
-  for(let i=0;i<list.length;i++){
-    if(primerScanStop){ st.textContent="Stopped."; break; }
-    const name=list[i][1];
-    st.textContent="Checking "+(i+1)+" of "+list.length+": "+name;
-    try{
-      const report=await locusPrimers(name, gene);
-      out.insertAdjacentHTML("beforeend", report.html);
-      if(report.status==="ok") ok++;
-      else if(report.status==="missing") missing++;
-      else failed++;
-    }catch(e){
-      failed++;
-      out.insertAdjacentHTML("beforeend", '<div class="card"><h3>'+esc(name)+'</h3><p class="err">Request failed: '+esc(e.message)+"</p></div>");
-    }
-    await new Promise(r=>setTimeout(r, 400));
-  }
-  if(!primerScanStop) st.textContent="Done. Predicted pairs: "+ok+". No gene record: "+missing+". No usable window: "+failed+".";
-}
 function primerView(){
-  const groups=[["all","All catalog species"],["human","Human"],["animal","Animal"],["plant","Plant"],["bacteria","Bacteria"],["virus","Virus"],["fungi","Fungi"],["mold","Mold"],["parasite","Parasite"],["amoeba","Amoeba"],["archaea","Archaea"]];
   document.getElementById("view").innerHTML=`<h1>Primer Design Studio</h1>
-  <p class="note">For each catalog species, this checks NCBI Gene for your symbol and, when a published locus is available, designs one 20 nt primer pair (GC 40–60%, Wallace Tm 54–66°C, amplicon 100–280 bp). Pairs are computational candidates, not lab-validated oligos. No PCR protocol is generated. Confirm hits in NCBI Primer-BLAST before class use.</p>
-  <div class="card">
-    <input id="bioGene" value="TP53" placeholder="Gene symbol, e.g. TP53">
-    <select id="bioGroup">${groups.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join("")}</select>
-    <button class="btn" onclick="scanSpeciesPrimers()">Check primers for these species</button>
-    <button class="btn ghost" onclick="stopPrimerScan()">Stop</button>
-    <p id="bioSt" class="status"></p>
-  </div>
-  <div id="bioOut"></div>
-  <h2>Saved primer records</h2>
-  <p class="muted">Save a pair you want to keep. Records stay in this browser only.</p>
+  <p class="note">This studio stores primer records you enter or copy from publications. It does not invent oligo sequences or claim specificity/validation. Use NCBI Primer-BLAST and IDT OligoAnalyzer under instructor/lab rules.</p>
   <div class="card">
     <select id="pCat"><option>Gene-specific</option><option>Broad-range</option></select>
     <input id="pId" placeholder="Primer ID">
     <input id="pSp" placeholder="Scientific species name">
     <input id="pTgt" placeholder="Target gene or DNA region">
     <input id="pAcc" placeholder="Reference accession">
-    <input id="pF" placeholder="Forward primer (copy a predicted pair or a published oligo)">
-    <input id="pR" placeholder="Reverse primer (copy a predicted pair or a published oligo)">
+    <input id="pF" placeholder="Forward primer (paste published or your candidate; not generated here)">
+    <input id="pR" placeholder="Reverse primer (paste published or your candidate; not generated here)">
     <input id="pAmp" placeholder="Expected amplicon length (if known)">
     <input id="pCite" placeholder="Publication / DOI / PMID">
     <select id="pVal"><option>Published primers</option><option>Computational candidates</option><option>Experimentally validated primers</option></select>
@@ -704,7 +580,6 @@ function renderSeq(){
   document.getElementById("seqList").innerHTML=DB.seqMeta.map(s=>`<div class="card"><b>${esc(s.file)}</b> (${esc(s.size)} bytes)<p>${esc(s.species)} · ${esc(s.kind||"unclassified by user")}</p><p class="muted">${esc(s.note)}</p></div>`).join("")||"<p class='muted'>No sequence files yet.</p>";
 }
 function protoView(){
-  const owned=DB.equip.filter(e=>e.status==="Owned").map(e=>e.name);
   document.getElementById("view").innerHTML=`<h1>Laboratory Protocols</h1>
   <p class="note">This matcher compares a research objective with owned vs planned gear and points to published sources. It does not invent temperatures, recipes, CRISPR cutting steps, or sterilization substitutes. Unknown environmental microbes are not assumed safe to culture at home. Supervisor review is required for wet-lab DNA work.</p>
   <input id="prObj" placeholder="Research objective e.g. photograph edible mushroom specimens">
@@ -856,4 +731,61 @@ function aiView(){
   document.getElementById("view").innerHTML=`<h1>AI Research Assistant</h1>
   <p class="note">This GitHub Pages file cannot call a private LLM unless you later add a backend and API key (never put keys in this public HTML). What it can do now: evidence search of NCBI, PubMed, UniProt, and your saved local records. It will not invent findings.</p>
   <textarea id="aiQ" rows="3" placeholder="Ask for published records e.g. TP53 Homo sapiens function">TP53 Homo sapiens</textarea>
-  <button class="btn" onclick="aiSearch()">Evidence search
+  <button class="btn" onclick="aiSearch()">Evidence search</button>
+  <p id="aiSt" class="status"></p><div id="aiOut"></div>`;
+}
+async function aiSearch(){
+  const q=document.getElementById("aiQ").value.trim();
+  const st=document.getElementById("aiSt"), out=document.getElementById("aiOut");
+  if(!q){ st.innerHTML="<span class='err'>Enter a query.</span>"; return; }
+  st.textContent="Searching local records + NCBI + PubMed + UniProt…";
+  const local=[];
+  DB.primers.filter(p=>JSON.stringify(p).toLowerCase().includes(q.toLowerCase())).forEach(p=>local.push("Primer record "+p.id));
+  DB.specimens.filter(p=>JSON.stringify(p).toLowerCase().includes(q.toLowerCase())).forEach(p=>local.push("Specimen "+p.id));
+  DB.crispr.filter(p=>JSON.stringify(p).toLowerCase().includes(q.toLowerCase())).forEach(p=>local.push("CRISPR project "+p.id));
+  let html=`<div class="card"><h3>Local saved records</h3><p>${local.map(esc).join("<br>")||"No local matches."}</p></div>`;
+  try{
+    const g=await ncbi("gene", q, 3,0);
+    html+=`<div class="card"><h3>NCBI Gene</h3>`+(g.ids.map(id=>{const it=g.result[id]||{}; return `<p>${esc(it.name)} ${esc(it.description)} · <a href="https://www.ncbi.nlm.nih.gov/gene/${id}" target="_blank" rel="noopener">${id}</a></p>`;}).join("")||"<p>unavailable</p>")+`</div>`;
+  }catch(e){ html+=`<div class="card err">NCBI Gene: ${esc(e.message)}</div>`; }
+  try{
+    const p=await ncbi("pubmed", q, 3,0);
+    html+=`<div class="card"><h3>PubMed</h3>`+(p.ids.map(id=>{const it=p.result[id]||{}; return `<p>${esc(it.title)} · <a href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener">${id}</a></p>`;}).join("")||"<p>unavailable</p>")+`</div>`;
+  }catch(e){ html+=`<div class="card err">PubMed: ${esc(e.message)}</div>`; }
+  try{
+    const u=await getJSON("https://rest.uniprot.org/uniprotkb/search?query="+encodeURIComponent(q)+"&size=2&format=json&fields=accession,protein_name,organism_name");
+    html+=`<div class="card"><h3>UniProt</h3>`+((u.results||[]).map(r=>`<p>${esc(r.primaryAccession)} · ${esc((r.organism||{}).scientificName||"")} · <a href="https://www.uniprot.org/uniprotkb/${r.primaryAccession}/entry" target="_blank" rel="noopener">open</a></p>`).join("")||"<p>unavailable</p>")+`</div>`;
+  }catch(e){ html+=`<div class="card err">UniProt: ${esc(e.message)}</div>`; }
+  html+=`<p class="muted">A hosted OpenAI/Anthropic API would require a private backend. Do not paste API keys into this public page.</p>`;
+  st.textContent="Evidence search complete. Sources linked above.";
+  out.innerHTML=html;
+}
+function searchView(){
+  const q=(document.getElementById("uniQ").value||"").trim().toLowerCase();
+  const hits=[];
+  const scan=(arr,type,fn)=>arr.forEach(x=>{ if(JSON.stringify(x).toLowerCase().includes(q)) hits.push({type,label:fn(x)}); });
+  scan(DB.primers,"primer",x=>x.id+" "+x.target);
+  scan(DB.specimens,"specimen",x=>x.id+" "+x.name);
+  scan(DB.equip,"equipment",x=>x.name+" "+x.status);
+  scan(DB.pubs,"publication",x=>x.title);
+  scan(DB.notes,"experiment",x=>x.exp+" "+x.obj);
+  scan(DB.crispr,"crispr-project",x=>x.id+" "+x.gene);
+  document.getElementById("view").innerHTML=`<h1>Universal search</h1><p class="muted">Query: ${esc(q)||"(empty)"} — only existing saved records plus a live NCBI taxonomy look-up. No fabricated links.</p>
+    <div>${hits.map(h=>`<div class="card"><span class="badge">${esc(h.type)}</span> ${esc(h.label)}</div>`).join("")||"<p>No local matches.</p>"}</div>
+    <p><button class="btn" onclick="document.getElementById('spQ').value=document.getElementById('uniQ').value;go('species')">Also search NCBI Taxonomy</button></p>`;
+}
+function exportAll(){
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="genome-research-os-backup.json"; a.click();
+}
+function importAll(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ const x=JSON.parse(rd.result); Object.keys(DB).forEach(k=>{ if(Array.isArray(x[k])) DB[k]=x[k]; }); saveDB(); alert("Imported local backup."); dash(); go("dash"); }catch(e){ alert("Invalid JSON"); } };
+  rd.readAsText(f);
+}
+document.getElementById("uniQ").addEventListener("keydown",e=>{ if(e.key==="Enter") go("search"); });
+loadDB();
+</script>
+</body>
+</html>
